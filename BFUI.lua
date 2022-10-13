@@ -97,6 +97,7 @@ function DiscordLib:Window(text)
     local Title2 = Instance.new("TextLabel")
     local Title3 = Instance.new("TextLabel")
     local Title4 = Instance.new("TextLabel")
+	local Title5 = Instance.new("TextLabel")
 	local CloseBtn = Instance.new("TextButton")
 	local CloseIcon = Instance.new("ImageLabel")
 	local MinimizeBtn = Instance.new("TextButton")
@@ -138,7 +139,7 @@ function DiscordLib:Window(text)
 	TopFrameHolder.BackgroundTransparency = 1.000
 	TopFrameHolder.BorderSizePixel = 0
 	TopFrameHolder.Position = UDim2.new(-0.000658480625, 0, 0, 0)
-	TopFrameHolder.Size = UDim2.new(0, 681, 0, 22)
+	TopFrameHolder.Size = UDim2.new(0, 681, 0, 30)
 
 	Title.Name = "Title"
 	Title.Parent = TopFrame
@@ -189,6 +190,19 @@ function DiscordLib:Window(text)
 	Title4.TextColor3 = Color3.fromRGB(200, 200, 200)
 	Title4.TextSize = 20.000
 	Title4.TextXAlignment = Enum.TextXAlignment.Right
+
+	Title5.Name = "Title5"
+	Title5.Parent = TopFrame
+    Title5.AnchorPoint = Vector2.new(0.1, 0.5)
+	Title5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Title5.BackgroundTransparency = 1.000
+	Title5.Position = UDim2.new(0.65, 0, 0.6, 0)
+	Title5.Size = UDim2.new(0, 192, 0, 23)
+	Title5.Font = Enum.Font.FredokaOne
+	Title5.Text = "Executor - "..tostring(identifyexecutor())
+	Title5.TextColor3 = Color3.fromRGB(153, 153, 255)
+	Title5.TextSize = 20.000
+	Title5.TextXAlignment = Enum.TextXAlignment.Right
 
 	CloseBtn.Name = "CloseBtn"
 	CloseBtn.Parent = TopFrame
@@ -312,7 +326,7 @@ function DiscordLib:Window(text)
 	ServersHold.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
 	ServersHold.BackgroundTransparency = 1.000
 	ServersHold.BorderSizePixel = 0
-	ServersHold.Position = UDim2.new(-0.000359333731, 0, 0.0580808073, 0)
+	ServersHold.Position = UDim2.new(-0.000359333731, 0, 0.1, 0)
 	ServersHold.Size = UDim2.new(0, 71, 0, 373)
 	ServersHold.ScrollBarThickness = 1
 	ServersHold.ScrollBarImageTransparency = 1
@@ -360,7 +374,7 @@ function DiscordLib:Window(text)
 		function()
 			if minimized == false then
 				MainFrame:TweenSize(
-					UDim2.new(0, 681, 0, 22),
+					UDim2.new(0, 681, 0, 30),
 					Enum.EasingDirection.Out,
 					Enum.EasingStyle.Quart,
 					.3,
@@ -1717,7 +1731,7 @@ function DiscordLib:Window(text)
 		Server.Font = Enum.Font.Gotham
 		Server.Text = ""
 		Server.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Server.TextSize = 18.000
+		Server.TextSize = 15.000
 
 		ServerBtnCorner.CornerRadius = UDim.new(1, 0)
 		ServerBtnCorner.Name = "ServerCorner"
@@ -1736,7 +1750,7 @@ function DiscordLib:Window(text)
 		ServerWhiteFrame.Parent = Server
 		ServerWhiteFrame.AnchorPoint = Vector2.new(0.5, 0.5)
 		ServerWhiteFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		ServerWhiteFrame.Position = UDim2.new(-0.347378343, 0, 0.502659559, 0)
+		ServerWhiteFrame.Position = UDim2.new(-0.347378343, 0, 0.5, 0)
 		ServerWhiteFrame.Size = UDim2.new(0, 11, 0, 10)
 
 		ServerWhiteFrameCorner.CornerRadius = UDim.new(1, 0)
