@@ -255,7 +255,7 @@ function DiscordLib:Window(text)
 	Userpad.Parent = TopFrameHolder
 	Userpad.BackgroundColor3 = Color3.fromRGB(41, 43, 47)
 	Userpad.BorderSizePixel = 0
-	Userpad.Position = UDim2.new(0.106243297, 0, 15.9807148, 0)
+	Userpad.Position = UDim2.new(0.106243297, 0, 11.8, 0)
 	Userpad.Size = UDim2.new(0, 179, 0, 43)
 
 	UserIcon.Name = "UserIcon"
