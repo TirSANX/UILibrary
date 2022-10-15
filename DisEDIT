@@ -86,8 +86,9 @@ Discord.Name = "Discord"
 Discord.Parent = game.Players.LocalPlayer.PlayerGui
 Discord.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
-function DiscordLib:Window(text)
+function DiscordLib:Window(text, toggle)
 	local currentservertoggled = ""
+	local UIToggle = toggle or Enum.KeyCode.RightControl or _G.Toggle
 	local minimized = false
 	local fs = false
 	local settingsopened = false
@@ -124,6 +125,24 @@ function DiscordLib:Window(text)
 	MainFrame.ClipsDescendants = true
 	MainFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
 	MainFrame.Size = UDim2.new(0, 681, 0, 396)
+
+	local uitoggled = false
+	UserInputService.InputBegan:Connect(function(io, p)
+		pcall(function()
+			if io.KeyCode == UIToggle then
+				if uitoggled == false then
+					MainFrame:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .3, true)
+					wait(.3)
+					Discord.Enabled = false
+					uitoggled = true
+				else
+					Discord.Enabled = true
+					MainFrame:TweenSize(UDim2.new(0, 681, 0, 396), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .3, true)
+					uitoggled = false
+				end
+			end
+		end)
+	end)
 
 	TopFrame.Name = "TopFrame"
 	TopFrame.Parent = MainFrame
