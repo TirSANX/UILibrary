@@ -140,7 +140,7 @@ function CFAHub:CreateWindow(title, gameName, intro)
     end
 
     local themes = {
-        SchemaColor = Color3.fromRGB(79, 195, 247),
+        SchemaColor = Color3.fromRGB(255, 61, 61),
         TextColor = Color3.fromRGB(255, 255, 255),
         Header = Color3.fromRGB(22, 22, 22),
         Container = Color3.fromRGB(34, 34, 34),
@@ -149,7 +149,7 @@ function CFAHub:CreateWindow(title, gameName, intro)
         Drop = Color3.fromRGB(28, 28, 28),
         ScrollBar = Color3.fromRGB(149, 149, 149),
         NotiBackground = Color3.fromRGB(0, 0, 0),
-        Glow = Color3.fromRGB(79, 195, 247),
+        Glow = Color3.fromRGB(255, 61, 61),
         Logo = "rbxassetid://11691419396"
     }
 
@@ -170,7 +170,7 @@ function CFAHub:CreateWindow(title, gameName, intro)
         Logo.BackgroundTransparency = 1.000
         Logo.ImageTransparency = 1
         Logo.Position = UDim2.new(0.5, 0, 0.6, 0)
-        Logo.Size = UDim2.new(0, 200, 0, 200)
+        Logo.Size = UDim2.new(0, 75, 0, 50)
         Logo.Image = themes.Logo
 
         Tween:Create(Logo, Tweeninfo(0.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut), {
