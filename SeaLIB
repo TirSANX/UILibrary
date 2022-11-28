@@ -129,7 +129,7 @@ end
 
 local GuiName = "SKID FROM SEA HUB"
 
-function CFAHub:CreateWindow(title, gameName, intro)
+function CFAHub:CreateWindow(title, gameName, intro, toggle)
     title = title or "<font color=\"#1CB2F5\">CFA Hub Premium</font>"
     gameName = gameName or "N/A"
 
@@ -187,7 +187,7 @@ function CFAHub:CreateWindow(title, gameName, intro)
 
         Logo:Destroy()
     end
-
+    local UICLOSE = toggle or Enum.KeyCode.RightControl or _G.Toggle
     local Container = Instance.new("Frame")
     local UIScale = Instance.new("UIScale")
     local ContainerCorner = Instance.new("UICorner")
@@ -471,7 +471,31 @@ function CFAHub:CreateWindow(title, gameName, intro)
 
     UIScale.Parent = Container
     UIScale.Scale = 1
-
+    local UserInputService = game:GetService("UserInputService")
+	local uitoggled = false
+	UserInputService.InputBegan:Connect(function(io, p)
+		pcall(function()
+			if io.KeyCode == UICLOSE then
+				if uitoggled == false then
+					Container:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
+					Header:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
+                    logo:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
+                    Title.Visible = false
+                    wait(.3)
+					CFAHubGui.Enabled = false
+					uitoggled = true
+				else
+					CFAHubGui.Enabled = true
+					Container:TweenSize(UDim2.new(0, 673, 0, 402), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
+					Header:TweenSize(UDim2.new(0, 673, 0, 29), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
+                    logo:TweenSize(UDim2.new(0, 25, 0, 25), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
+                    wait(.8)
+                    Title.Visible=true
+                    uitoggled = false
+				end
+			end
+		end)
+	end)
     ContainerCorner.CornerRadius = UDim.new(0, 4)
     ContainerCorner.Name = "ContainerCorner"
     ContainerCorner.Parent = Container
@@ -2268,5 +2292,4 @@ function CFAHub:CreateWindow(title, gameName, intro)
     end
     return Tabs
 end
-
 return CFAHub
