@@ -632,7 +632,7 @@ function CFAHub:CreateWindow(title, gameName, intro)
     ShadowBlue.Position = UDim2.new(0.5, 0, 0.5, 0)
     ShadowBlue.Size = UDim2.new(1, 74, 1, 45)
     ShadowBlue.ZIndex = 0
-    ShadowBlue.Image = "http://www.roblox.com/asset/?id=11691419396"
+    ShadowBlue.Image = "http://www.roblox.com/asset/?id=7495863394"
     ShadowBlue.ImageColor3 = themes.Glow
     Objects[ShadowBlue] = "Shadow"
 
