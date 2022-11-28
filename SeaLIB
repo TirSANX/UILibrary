@@ -1,4 +1,4 @@
-local CFAHub = {}
+local CHUB = {}
 
 warn("Preparing UI...")
 
@@ -93,7 +93,7 @@ function Animate:CreateGradient(object)
     UIGradient.Parent = object
 end
 
-function CFAHub:DraggingEnabled(frame, parent)
+function CHUB:DraggingEnabled(frame, parent)
     parent = parent or frame
 
     local dragging = false
@@ -129,7 +129,7 @@ end
 
 local GuiName = "SKID FROM SEA HUB"
 
-function CFAHub:CreateWindow(title, gameName, intro, toggle)
+function CHUB:CreateWindow(title, gameName, intro, toggle)
     title = title or "<font color=\"#1CB2F5\">CFA Hub Premium</font>"
     gameName = gameName or "N/A"
 
@@ -153,18 +153,18 @@ function CFAHub:CreateWindow(title, gameName, intro, toggle)
         Logo = "rbxassetid://11691419396"
     }
 
-    table.insert(CFAHub, title)
+    table.insert(CHUB, title)
 
-    function CFAHub:SetTheme(theme, color3)
+    function CHUB:SetTheme(theme, color3)
         themes[theme] = color3
     end
 
-    local CFAHubGui = Instance.new("ScreenGui")
+    local CHUBGui = Instance.new("ScreenGui")
 
     if intro == true then
         local Logo = Instance.new("ImageLabel")
         
-        Logo.Parent = CFAHubGui
+        Logo.Parent = CHUBGui
         Logo.AnchorPoint = Vector2.new(0.5, 0.5)
         Logo.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
         Logo.BackgroundTransparency = 1.000
@@ -220,7 +220,7 @@ function CFAHub:CreateWindow(title, gameName, intro, toggle)
     UIListLayout.Padding = UDim.new(0, 8)
     
     CurrentAlert.Name = "NotiContainer"
-    CurrentAlert.Parent = CFAHubGui
+    CurrentAlert.Parent = CHUBGui
     CurrentAlert.AnchorPoint = Vector2.new(1, 1)
     CurrentAlert.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     CurrentAlert.BackgroundTransparency = 1.000
@@ -228,7 +228,7 @@ function CFAHub:CreateWindow(title, gameName, intro, toggle)
     CurrentAlert.Size = UDim2.new(1, -10, 1, -10)
     CurrentAlert.ZIndex = 9
 
-    function CFAHub:AddNoti(header, message, duration, buttonEnable, callback)
+    function CHUB:AddNoti(header, message, duration, buttonEnable, callback)
         header = header or "Announcement"
         message = message or "Nil"
         duration = duration or 120
@@ -443,7 +443,7 @@ function CFAHub:CreateWindow(title, gameName, intro, toggle)
         end)
     end -- final
 
-    function CFAHub:ToggleUI()
+    function CHUB:ToggleUI()
         if Container.Visible == true then
             Utility:TweenObject(UIScale, {Scale = 0.95}, 0.25)
             wait(0.25)
@@ -454,14 +454,14 @@ function CFAHub:CreateWindow(title, gameName, intro, toggle)
         end
     end
 
-    CFAHub:DraggingEnabled(Header, Container)
+    CHUB:DraggingEnabled(Header, Container)
 
-    CFAHubGui.Name = GuiName
-    CFAHubGui.Parent = CoreGui
-    CFAHubGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+    CHUBGui.Name = GuiName
+    CHUBGui.Parent = CoreGui
+    CHUBGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
     Container.Name = "Container"
-    Container.Parent = CFAHubGui
+    Container.Parent = CHUBGui
     Container.AnchorPoint = Vector2.new(0.5, 0.5)
     Container.BackgroundColor3 = themes.Container
     Objects[Container] = "Container"
@@ -482,10 +482,10 @@ function CFAHub:CreateWindow(title, gameName, intro, toggle)
                     logo:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
                     Title.Visible = false
                     wait(.3)
-					CFAHubGui.Enabled = false
+					CHUBGui.Enabled = false
 					uitoggled = true
 				else
-					CFAHubGui.Enabled = true
+					CHUBGui.Enabled = true
 					Container:TweenSize(UDim2.new(0, 673, 0, 402), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
 					Header:TweenSize(UDim2.new(0, 673, 0, 29), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
                     logo:TweenSize(UDim2.new(0, 25, 0, 25), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .8, true)
@@ -2292,4 +2292,9 @@ function CFAHub:CreateWindow(title, gameName, intro, toggle)
     end
     return Tabs
 end
-return CFAHub
+local txt="Grand Piece Online (SYNAPSE X)"
+if identifyexecutor()=="Krnl" then 
+    txt="Grand Piece Online (KRNL)"
+end
+local NOOB = CHUB:CreateWindow("<font color=\"#F94D4D\">Crimson HUB</font>", txt, true, _G.Toggle)
+return CHUB
