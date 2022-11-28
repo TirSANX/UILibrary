@@ -2292,9 +2292,4 @@ function CHUB:CreateWindow(title, gameName, intro, toggle)
     end
     return Tabs
 end
-local txt="Grand Piece Online (SYNAPSE X)"
-if identifyexecutor()=="Krnl" then 
-    txt="Grand Piece Online (KRNL)"
-end
-local NOOB = CHUB:CreateWindow("<font color=\"#F94D4D\">Crimson HUB</font>", txt, true, _G.Toggle)
 return CHUB
