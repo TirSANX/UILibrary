@@ -1,3 +1,4 @@
+repeat wait() until game:IsLoaded()
 -- Use loadstring to avoid "nil value" errors with sharedRequire
 --[=[
     Optimized UI Library (Fixed)
