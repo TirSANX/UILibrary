@@ -1,17 +1,13 @@
+-- Use loadstring to avoid "nil value" errors with sharedRequire
 --[=[
-    Optimized UI Library
-    - Added Theme table for easy customization
-    - Cached all Roblox services
-    - Replaced RunService search with event-based :GetPropertyChangedSignal
-    - Replaced wait() with task.wait()
-    - Replaced coroutine.wrap() with task.spawn()
-    - Fixed deprecated :TweenPosition() calls
-    - Removed _G (global) variable usage
-    - Fixed sec:Switch() logic bug
+    Optimized UI Library (Fixed)
+    - Fixed UI resizing visual bugs (Green Button)
+    - Added ClipsDescendants to containers
+    - Switched to Scale-based sizing for smooth animations
+    - Removed redundant updateChildSizes logic
 ]=]
 local Theme = {
     Colors = {
-
         MainBack = Color3.fromRGB(20, 20, 23),
         ContentBack = Color3.fromRGB(25, 25, 28),
         Primary = Color3.fromRGB(139, 92, 246),
@@ -20,16 +16,13 @@ local Theme = {
         Gray = Color3.fromRGB(45, 45, 50),
         LightGray = Color3.fromRGB(35, 35, 40), 
 
-
         Text = Color3.fromRGB(180, 180, 185),
         TextDark = Color3.fromRGB(255, 255, 255),
         TextLight = Color3.fromRGB(255, 255, 255),
 
-
         Close = Color3.fromRGB(254, 94, 86),
         Minimize = Color3.fromRGB(255, 189, 46),
         Resize = Color3.fromRGB(39, 200, 63),
-
 
         SplashBack = Color3.fromRGB(25, 25, 25),
         Shadow = Color3.fromRGB(0, 0, 0)
@@ -52,8 +45,6 @@ local CoreGui = game:GetService("CoreGui")
 local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 local CollectionService = game:GetService("CollectionService")
-local ContextActionService = game:GetService("ContextActionService")
-
 
 local lib = {}
 local sections = {}
@@ -63,11 +54,9 @@ local notifs = {}
 local visible = true
 local dbcooper = false
 
--- Cached Tween function
 local function tp(ins, pos, time)
     TweenService:Create(ins, TweenInfo.new(time, Enum.EasingStyle.Quart, Enum.EasingDirection.InOut), {Position = pos}):Play()
 end
-
 
 local function createGradient(parent, color1, color2)
     local grad = Instance.new("UIGradient", parent)
@@ -86,7 +75,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     local logo
     local window = {}
     local notifdarkness, notif2darkness
-    
 
     local isMobile = UserInputService.TouchEnabled
     local minSize = isMobile and Vector2.new(650, 400) or Vector2.new(850, 600)
@@ -95,7 +83,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     local isMaximized = false
     local originalSize
     local originalPosition
-    
 
     if syn then
         if CoreGui:FindFirstChild("ScreenGui") and deleteprevious then
@@ -122,11 +109,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         scrgui.Parent = CoreGui
     end
 
-
     local loadingScreen
     local progressBar
     local function updateLoadingProgress(statusText, progress)
-
         if loadingScreen and loadingScreen:FindFirstChild("Status") then
             loadingScreen.Status.Text = statusText
         end
@@ -137,7 +122,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     end
 
     if dosplash then
-
         local blur = Instance.new("BlurEffect")
         blur.Name = "MacOsLibBlur"
         blur.Parent = game:GetService("Lighting")
@@ -145,8 +129,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         blur.Enabled = true
         TweenService:Create(blur, TweenInfo.new(0.5), {Size = 16}):Play()
 
-
-        local statusLabel -- Forward declare
+        local statusLabel
 
         loadingScreen = Instance.new("Frame")
         loadingScreen.Name = "LoadingScreen"
@@ -182,7 +165,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         statusLabel.TextSize = 16
         statusLabel.ZIndex = 1001
 
-
         local progressBarTrack = Instance.new("Frame", loadingScreen)
         progressBarTrack.Size = UDim2.new(0.8, 0, 0, 8)
         progressBarTrack.Position = UDim2.new(0.5, 0, 0.95, 0)
@@ -203,7 +185,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         local uc_progress_bar = Instance.new("UICorner", progressBar)
         uc_progress_bar.CornerRadius = Theme.Sizes.FullRadius
 
-
         loadingScreen.Position = UDim2.new(0.5, 0, -0.5, 0)
         tp(loadingScreen, UDim2.new(0.5, 0, 0.5, 0), 0.5)
         task.wait(0.5)
@@ -211,7 +192,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
     updateLoadingProgress("Creating main window...", 0.25)
     task.wait(1)
-
 
     local main = Instance.new("Frame")
     main.Name = "main"
@@ -242,7 +222,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     mainShadow.ScaleType = Enum.ScaleType.Slice
     mainShadow.SliceCenter = Rect.new(100, 100, 100, 100)
 
-
     local mainFloatingBorder = Instance.new("Frame")
     mainFloatingBorder.Name = "FloatingBorder"
     mainFloatingBorder.Parent = main
@@ -261,8 +240,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     borderCorner.CornerRadius = Theme.Sizes.LargeRadius
     borderCorner.Parent = mainFloatingBorder
 
-
-
     local indicatorHeight = 50
     local collapsedWidth = 50
     local expandedWidth = 200
@@ -279,7 +256,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     hiddenIndicator.ZIndex = 8
     hiddenIndicator.Visible = false
     hiddenIndicator.Text = ""
-
 
     local hiBackground = Instance.new("Frame")
     hiBackground.Name = "BackgroundFrame"
@@ -313,7 +289,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     hiText.TextWrapped = true 
     hiText.Visible = false 
     
-
     hiddenIndicator.MouseEnter:Connect(function()
         if not visible then
             TweenService:Create(hiddenIndicator, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Size = expandedSize}):Play()
@@ -328,11 +303,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
     end)
 
-
     hiddenIndicator.MouseButton1Click:Connect(function()
         window:ToggleVisible()
     end)
-
 
     local mobileIndicator = Instance.new("TextButton")
     mobileIndicator.Name = "MobileIndicator"
@@ -351,7 +324,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     local miCorner = Instance.new("UICorner", mobileIndicator)
     miCorner.CornerRadius = Theme.Sizes.SmallRadius
 
-
     local miStroke = Instance.new("UIStroke", mobileIndicator)
     miStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
     miStroke.Color = Theme.Colors.Primary
@@ -365,7 +337,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     miLogo.AnchorPoint = Vector2.new(0.5, 0.5)
     miLogo.Image = "rbxassetid://101129417614969"
 
-
     mobileIndicator.MouseButton1Click:Connect(function()
         if not visible then
             window:ToggleVisible()
@@ -375,7 +346,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     updateLoadingProgress("Setting up components...", 0.5)
     task.wait(1)
     
-
     local dragging
     local dragInput
     local dragStart
@@ -386,17 +356,18 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         main.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
     end
 
-
     local sidebarWidth = 200
     
-
     local workarea = Instance.new("Frame")
     workarea.Name = "workarea"
     workarea.Parent = main
     workarea.BackgroundColor3 = Theme.Colors.ContentBack
+    -- [FIX] Use Scale for width to automatically resize with main window
     workarea.Position = UDim2.new(0, sidebarWidth, 0, 0)
-    workarea.Size = UDim2.new(1, -sidebarWidth, 1, 0)
+    workarea.Size = UDim2.new(1, -sidebarWidth, 1, 0) 
     workarea.Active = false
+    -- [FIX] Ensure content doesn't spill out during resize
+    workarea.ClipsDescendants = true 
     
     local uc_2 = Instance.new("UICorner")
     uc_2.CornerRadius = Theme.Sizes.LargeRadius
@@ -418,7 +389,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     logo.Position = UDim2.new(0, (sidebarWidth / 2) - 5, 0, 60)
     logo.AnchorPoint = Vector2.new(0.4, 0)
     logo.ZIndex = 2
-
 
     search = Instance.new("Frame")
     search.Name = "search"
@@ -463,23 +433,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         searchtextbox:CaptureFocus()
     end)
 
-    local function updateChildSizes(newSize)
-        -- 🚀 Updated logic
-        workarea.Size = UDim2.new(0, newSize.X - sidebarWidth, 0, newSize.Y)
-        workarea.Position = UDim2.new(0, sidebarWidth, 0, 0) 
-        
-        if sidebar then
-
-            local logoBottom = logo.AbsolutePosition.Y + logo.AbsoluteSize.Y
-            local searchBottom = search.AbsolutePosition.Y + search.AbsoluteSize.Y
-            local sidebarTopOffset = searchBottom - main.AbsolutePosition.Y + 10
-            
-            sidebar.Size = UDim2.new(0, sidebarWidth - 15, 0, newSize.Y - sidebarTopOffset - 15) 
-            sidebar.Position = UDim2.new(0, 10, 0, sidebarTopOffset)
-        end
-    end
-    
-
     main.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
@@ -494,7 +447,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
     end)
 
-    -- 🚀 CONSOLIDATED: All mouse movement logic
     UserInputService.InputChanged:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
             if dragging then
@@ -506,7 +458,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     updateLoadingProgress("Configuring sidebar...", 0.75)
     task.wait(0.6)
 
-
     sidebar = Instance.new("ScrollingFrame")
     sidebar.Name = "sidebar"
     sidebar.Parent = main
@@ -515,10 +466,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     sidebar.BackgroundColor3 = Theme.Colors.MainBack
     sidebar.BorderSizePixel = 0
     sidebar.Position = UDim2.new(0, 10, 0, 214)
-    sidebar.Size = UDim2.new(0, sidebarWidth - 15, 1, -229)
+    -- [FIX] Use Scale for height (100% height minus top offset minus padding)
+    sidebar.Size = UDim2.new(0, sidebarWidth - 15, 1, -229) 
     sidebar.AutomaticCanvasSize = "Y"
     sidebar.CanvasSize = UDim2.new(0, 0, 0, 0)
-
     sidebar.ScrollBarThickness = 3
     sidebar.ScrollBarImageColor3 = Theme.Colors.Text
 
@@ -545,7 +496,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 if inputText == "" then
                     found = true
                 end
-                
 
                 if child.Name == "sidebardivider" then
                     if string.find(string.upper(child.Text), inputText) or inputText == "" then
@@ -558,7 +508,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
     end)
     
-
     local buttons = Instance.new("Frame")
     buttons.Name = "buttons"
     buttons.Parent = main
@@ -629,7 +578,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     uc_20.CornerRadius = Theme.Sizes.FullRadius
     uc_20.Parent = resize
     
-
     local topBar = Instance.new("Frame")
     topBar.Name = "TopBar"
     topBar.Parent = workarea
@@ -660,9 +608,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     subtitle.TextColor3 = Theme.Colors.Text
     subtitle.TextSize = 16
     subtitle.TextXAlignment = Enum.TextXAlignment.Left
-
-
-
 
     local notif = Instance.new("Frame")
     notif.Name = "notif"
@@ -756,7 +701,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     notiftext.TextColor3 = Theme.Colors.Text
     notiftext.TextSize = 16
     notiftext.TextWrapped = true
-
 
     local notif2 = Instance.new("Frame")
     notif2.Name = "notif2"
@@ -891,31 +835,26 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         visible = not visible
         dbcooper = true
         if visible then
-            -- Show UI
             hiddenIndicator.Size = collapsedSize
             if not UserInputService.TouchEnabled then
                 hiddenIndicator.Visible = false
-
                 tp(hiddenIndicator, UDim2.new(1, 190, 0.7, 0), 0.3)
             else 
                 mobileIndicator.Visible = false
             end
             tp(main, UDim2.new(0.5, 0, 0.5, 0), 0.5)
             hiText.Visible = false
-
             task.wait(0.5)
             if not UserInputService.TouchEnabled then
                 hiddenIndicator.Visible = false
             end
             dbcooper = false
         else
-
             tp(main, main.Position + UDim2.new(0, 0, 2, 0), 0.5)
             task.wait(0.5)
             if not UserInputService.TouchEnabled then
                 hiddenIndicator.Size = collapsedSize
                 hiddenIndicator.Visible = true
-
                 tp(hiddenIndicator, UDim2.new(1, -10, 0.7, 0), 0.3) 
             else
                 mobileIndicator.Visible = true
@@ -926,7 +865,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     end
 
     if visiblekey then
-
         minimize.MouseButton1Click:Connect(function()
             if not UserInputService.TouchEnabled then
                 window:ToggleVisible()
@@ -940,7 +878,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     end
 
     function window:GreenButton(callback)
-
         if window.greenButtonConnection then 
             window.greenButtonConnection:Disconnect() 
         end
@@ -950,47 +887,32 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             local tweenTime = 0.3
             
             if isMaximized then
-
                 originalSize = main.AbsoluteSize
                 originalPosition = main.Position
                 
-
                 local viewportSize = workspace.CurrentCamera.ViewportSize
                 local newSize = viewportSize * 0.9
                 local newPos = UDim2.new(0.5, 0, 0.5, 0)
                 
-
                 TweenService:Create(main, TweenInfo.new(tweenTime), {Size = UDim2.new(0, newSize.X, 0, newSize.Y), Position = newPos}):Play()
                 
-
-                local newChildSize = Vector2.new(newSize.X, newSize.Y)
-                updateChildSizes(newChildSize)
-                
             else
-
                 if not originalSize then isMaximized = false; return end
-                
                 TweenService:Create(main, TweenInfo.new(tweenTime), {Size = UDim2.new(0, originalSize.X, 0, originalSize.Y), Position = originalPosition}):Play()
-                
-
-                updateChildSizes(originalSize)
             end
             
-
             task.wait(tweenTime)
             task.wait()
             
             for i, section in ipairs(sections) do
                 local workarea = workareas[i]
                 if workarea and workarea.Visible then
-
                     local secAPI = sectionAPIs[i]
                     if secAPI and secAPI.Select then
                         secAPI:Select()
                     end
                 end
             end
-
 
             if callback then
                 task.spawn(callback, isMaximized)
@@ -1133,7 +1055,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         sidebardivider.Size = UDim2.new(1, 0, 0, 26)
         sidebardivider.Font = Theme.Fonts.Body
         sidebardivider.Text = name
-        sidebardivider.TextColor3 = Theme.Colors.text
+        sidebardivider.TextColor3 = Theme.Colors.Text
         sidebardivider.TextSize = 16
         sidebardivider.TextWrapped = true
         sidebardivider.TextXAlignment = Enum.TextXAlignment.Left
@@ -1246,7 +1168,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         grid.SortOrder = Enum.SortOrder.LayoutOrder
         grid.FillDirection = Enum.FillDirection.Vertical
         grid.StartCorner = Enum.StartCorner.TopLeft
-        grid.CellPadding = UDim2.new(0, 5, 0, 5)
+        -- [FIX] Increased padding between columns ("pages") for better separation
+        grid.CellPadding = UDim2.new(0, 20, 0, 10)
         grid.CellSize = UDim2.new(1, 0, 0, 37)
         
 
@@ -1313,7 +1236,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 grid.Parent = workareamain
                 
 
-                local totalPadding = 5 * (numColumns - 1)
+                local totalPadding = 20 * (numColumns - 1) -- Adjusted for new padding
                 grid.CellSize = UDim2.new(1/numColumns, -totalPadding/numColumns, 0, 37) 
             else
 
