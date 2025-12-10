@@ -183,10 +183,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
         progressBar = Instance.new("Frame", progressBarTrack)
         progressBar.Size = UDim2.new(0, 0, 1, 0)
-        progressBar.BackgroundColor3 = Theme.Colors.Primary
+        progressBar.BackgroundColor3 = Color3.fromRGB(139, 92, 246)
         progressBar.ZIndex = 1002
         
-        createGradient(progressBar, Theme.Colors.Primary, Theme.Colors.PrimaryLight)
+        createGradient(progressBar, Color3.fromRGB(139, 92, 246), Color3.fromRGB(160, 120, 255))
 
         local uc_progress_bar = Instance.new("UICorner", progressBar)
         uc_progress_bar.CornerRadius = Theme.Sizes.FullRadius
@@ -1087,14 +1087,14 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         local selectionBar = Instance.new("Frame")
         selectionBar.Name = "SelectionBar"
         selectionBar.Parent = sidebar2
-        selectionBar.BackgroundColor3 = Theme.Colors.Primary
+        selectionBar.BackgroundColor3 = Color3.fromRGB(139, 92, 246)
         selectionBar.BorderSizePixel = 0
         selectionBar.Size = UDim2.new(0, 3, 0.8, 0)
         selectionBar.Position = UDim2.new(1, -3, 0.1, 0)
         selectionBar.Visible = false
         local sbCorner = Instance.new("UICorner", selectionBar)
         sbCorner.CornerRadius = Theme.Sizes.FullRadius
-        createGradient(selectionBar, Theme.Colors.Primary, Theme.Colors.PrimaryLight)
+        createGradient(selectionBar, Color3.fromRGB(139, 92, 246), Color3.fromRGB(160, 120, 255))
 
 
         local sectionIcon = Instance.new("ImageLabel")
@@ -1194,7 +1194,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
             if currentTitle then currentTitle.TextColor3 = Theme.Colors.TextDark end
             if currentSubtitle then currentSubtitle.TextColor3 = Theme.Colors.Text end
-            if selectedIcon then selectedIcon.ImageColor3 = Theme.Colors.Primary end
+            if selectedIcon then selectedIcon.ImageColor3 = Color3.fromRGB(139, 92, 246) end
 
 
             if activeWorkarea ~= workareamain then
@@ -1409,16 +1409,56 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             SectionContentPadding.PaddingRight = UDim.new(0, 10)
 
             -- Toggle Logic
+            local tweening = false
             SectionHeader.MouseButton1Click:Connect(function()
+                if tweening then return end
+                tweening = true
+
                 collapsed = not collapsed
                 local targetRotation = collapsed and -90 or 0
-                TweenService:Create(ArrowIcon, TweenInfo.new(0.2), {Rotation = targetRotation}):Play()
-                SectionContent.Visible = not collapsed  -- ADDED BACK: This line is critical!
+                local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
 
-                -- After a section's visibility changes, its size is recalculated.
-                -- We wait one frame, then force the parent ScrollingFrame to recalculate its canvas size.
-                RunService.Heartbeat:Wait()
-                workareamain.CanvasSize = UDim2.new()
+                TweenService:Create(ArrowIcon, tweenInfo, {Rotation = targetRotation}):Play()
+
+                if collapsed then
+                    -- COLLAPSING
+                    local currentHeight = SectionContent.AbsoluteSize.Y
+                    SectionContent.AutomaticSize = Enum.AutomaticSize.None
+                    SectionContent.Size = UDim2.new(1, 0, 0, currentHeight)
+
+                    local tween = TweenService:Create(SectionContent, tweenInfo, {Size = UDim2.new(1, 0, 0, 0)})
+                    tween.Completed:Connect(function()
+                        SectionContent.Visible = false
+                        SectionContent.AutomaticSize = Enum.AutomaticSize.Y -- Reset for next expansion
+                        tweening = false
+                    end)
+                    tween:Play()
+                else
+                    -- EXPANDING
+                    -- To prevent flicker, we calculate the target height using an off-screen clone
+                    local clone = SectionContent:Clone()
+                    clone.Parent = scrgui
+                    clone.Position = UDim2.new(5, 0, 5, 0) -- Position it way off-screen
+                    clone.AutomaticSize = Enum.AutomaticSize.Y
+                    clone.Visible = true
+                    
+                    RunService.Heartbeat:Wait() -- Let the clone calculate its size
+                    
+                    local targetHeight = clone.AbsoluteSize.Y
+                    clone:Destroy()
+
+                    -- Now, animate the actual SectionContent frame, which is starting at size 0
+                    SectionContent.Visible = true
+                    SectionContent.AutomaticSize = Enum.AutomaticSize.None
+                    SectionContent.Size = UDim2.new(1, 0, 0, 0)
+
+                    local tween = TweenService:Create(SectionContent, tweenInfo, {Size = UDim2.new(1, 0, 0, targetHeight)})
+                    tween.Completed:Connect(function()
+                        SectionContent.AutomaticSize = Enum.AutomaticSize.Y -- Let it manage its own size again
+                        tweening = false
+                    end)
+                    tween:Play()
+                end
             end)
 
             function section:Button(text, callback)
