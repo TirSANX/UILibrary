@@ -892,6 +892,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         window.greenButtonConnection = resize.MouseButton1Click:Connect(function()
             isMaximized = not isMaximized
             local tweenTime = 0.3
+            local tween
             
             if isMaximized then
                 originalSize = main.AbsoluteSize
@@ -901,14 +902,16 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local newSize = viewportSize * 0.9
                 local newPos = UDim2.new(0.5, 0, 0.5, 0)
                 
-                TweenService:Create(main, TweenInfo.new(tweenTime), {Size = UDim2.new(0, newSize.X, 0, newSize.Y), Position = newPos}):Play()
+                tween = TweenService:Create(main, TweenInfo.new(tweenTime), {Size = UDim2.new(0, newSize.X, 0, newSize.Y), Position = newPos})
                 
             else
                 if not originalSize then isMaximized = false; return end
-                TweenService:Create(main, TweenInfo.new(tweenTime), {Size = UDim2.new(0, originalSize.X, 0, originalSize.Y), Position = originalPosition}):Play()
+                tween = TweenService:Create(main, TweenInfo.new(tweenTime), {Size = UDim2.new(0, originalSize.X, 0, originalSize.Y), Position = originalPosition})
             end
             
-            task.wait(tweenTime)
+            tween:Play()
+            tween.Completed:Wait()
+            RunService.Heartbeat:Wait() -- Wait one frame for AbsoluteSize to propagate
 
             for i, section in ipairs(sections) do
                 local workarea = workareas[i]
@@ -1222,69 +1225,54 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
             end
             
-
-            local componentCount = 0
-            for _, child in ipairs(workareamain:GetChildren()) do
-                if string.find(child.Name, "_Section$") then
-                    local sectionContent = child:FindFirstChild("Content")
-                    if sectionContent then
-                        for _, element in ipairs(sectionContent:GetChildren()) do
-                            local n = element.Name
-                            if n == "button" or n == "label" or n == "toggleswitch" or n == "textfield" or n == "slider" or n == "dropdown" then
-                                componentCount = componentCount + 1
-                            end
-                        end
-                    end
-                else
-                    local n = child.Name
-                    if n == "header" or n == "padding" or n == "button" or n == "label" or n == "toggleswitch" or n == "textfield" or n == "slider" or n == "dropdown" then
-                        componentCount = componentCount + 1
-                    end
-                end
-            end
-            
-            local splitThreshold = 8
-            local workareaWidth = workareamain.AbsoluteSize.X
-            local minColumnWidth = 300
-            local numColumns = 1
-            
-            if isMaximized then
-                numColumns = math.max(1, math.floor(workareaWidth / minColumnWidth))
-                pad.PaddingTop = UDim.new(0, 25) -- Increased padding for maximized view
-            else
-                pad.PaddingTop = UDim.new(0, 10) -- Default padding
-            end
-
-            -- 1. Collect all layout-managed items and clear old layouts/containers
+            -- 1. Collect all existing items into a flat list
             local allItems = {}
             local oldContainer = workareamain:FindFirstChild("LayoutColumn_Container")
             if oldContainer then
-                -- We are in multi-column mode, collect items from the columns
+                -- Collect from existing columns
                 for _, column in ipairs(oldContainer:GetChildren()) do
                     if column.Name:find("LayoutColumn_") then
                         for _, item in ipairs(column:GetChildren()) do
-                            if item:IsA("Frame") then table.insert(allItems, item) end
+                            if item:IsA("GuiObject") then table.insert(allItems, item) end
                         end
                     end
                 end
             else
-                -- We are in single-column mode, collect items directly
+                -- Collect from single-column view
                 for _, child in ipairs(workareamain:GetChildren()) do
-                    local n = child.Name
-                    if n:find("_Section$") or n == "header" or n == "padding" or n == "tab_searchbar" then
+                    -- Collect any GUI object that isn't a layout helper
+                    if child:IsA("GuiObject") and not child:IsA("UILayout") and child.Name ~= "pad" then
                         table.insert(allItems, child)
                     end
                 end
             end
+
+            -- 2. Determine layout parameters
+            local splitThreshold = 2 -- How many items are needed to justify splitting
+            local itemCount = #allItems
+            local workareaWidth = workareamain.AbsoluteSize.X
+            local minColumnWidth = 300
+            local numColumns
+            
+            if isMaximized then
+                numColumns = math.max(1, math.floor(workareaWidth / minColumnWidth))
+                pad.PaddingTop = UDim.new(0, 25)
+            else
+                numColumns = 1
+                pad.PaddingTop = UDim.new(0, 10)
+            end
+
+            -- 3. Detach all items and current layouts
             for _, item in ipairs(allItems) do item.Parent = nil end
             if oldContainer then oldContainer:Destroy() end
-            ull.Parent = nil
+            if ull then ull.Parent = nil end -- ull is the single-column layout
 
-            -- Sort all items by their original LayoutOrder
+            -- 4. Sort items by their original layout order
             table.sort(allItems, function(a, b) return a.LayoutOrder < b.LayoutOrder end)
 
-            if isMaximized and numColumns > 1 and componentCount > splitThreshold then
-                -- APPLY MULTI-COLUMN (VERTICAL FILL) LAYOUT
+            -- 5. Apply the new layout
+            if numColumns > 1 and itemCount > splitThreshold then
+                -- APPLY MULTI-COLUMN LAYOUT
                 local columnsContainer = Instance.new("Frame", workareamain)
                 columnsContainer.Name = "LayoutColumn_Container"
                 columnsContainer.BackgroundTransparency = 1
@@ -1297,7 +1285,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 columnsLayout.Padding = UDim.new(0, 20)
                 
                 local columns = {}
-                local columnPadding = 20 * (numColumns - 1)
+                local columnPadding = columnsLayout.Padding.Offset * (numColumns - 1)
                 local columnWidth = UDim2.new(1 / numColumns, -columnPadding / numColumns, 0, 0)
                 
                 for i = 1, numColumns do
@@ -1308,26 +1296,25 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     column.AutomaticSize = Enum.AutomaticSize.Y
                     
                     local columnListLayout = Instance.new("UIListLayout", column)
-                    columnListLayout.Padding = UDim.new(0, 10)
+                    columnListLayout.Padding = UDim.new(0, 8)
                     columnListLayout.SortOrder = Enum.SortOrder.LayoutOrder
                     table.insert(columns, column)
                 end
                 
-                -- Distribute items into columns vertically
+                -- Distribute items into columns (vertical fill)
                 local itemsPerColumn = math.ceil(#allItems / numColumns)
                 for i, item in ipairs(allItems) do
                     local columnIndex = math.floor((i - 1) / itemsPerColumn) + 1
-                    -- Ensure columnIndex doesn't go out of bounds if calculation is slightly off
                     columnIndex = math.min(columnIndex, numColumns)
                     item.Parent = columns[columnIndex]
                 end
             else
-                -- Switch to list layout
+                -- APPLY SINGLE-COLUMN LAYOUT
                 for _, item in ipairs(allItems) do item.Parent = workareamain end
-                ull.Parent = workareamain
+                if ull then ull.Parent = workareamain end
             end
 
-            -- After changing the layout, wait a frame for sizes to be calculated, then reset canvas and scroll position.
+            -- 6. Reset scroll position
             RunService.Heartbeat:Wait()
             workareamain.CanvasSize = UDim2.new()
             workareamain.CanvasPosition = Vector2.new(0,0)
