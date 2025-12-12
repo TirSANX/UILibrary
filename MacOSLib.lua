@@ -1759,6 +1759,17 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 dropdownButton.Size = UDim2.new(0.5, 0, 1, -6)
                 dropdownButton.Font = Theme.Fonts.Body
                 dropdownButton.Text = (isMultiSelect and "Select") or (defaultValue or list[1] or "Select")
+
+                -- Initialize selectedItems from defaultValue for multi-select
+                if isMultiSelect and defaultValue and type(defaultValue) == "table" then
+                    for _, item in ipairs(defaultValue) do
+                        selectedItems[item] = true
+                    end
+                    if #defaultValue > 0 then
+                        dropdownButton.Text = table.concat(defaultValue, ", ")
+                    end
+                end
+
                 dropdownButton.TextColor3 = Theme.Colors.Text
                 dropdownButton.TextSize = 14
                 dropdownButton.ZIndex = 8
