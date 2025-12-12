@@ -1869,7 +1869,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end
                 end
     
-                for _, optionName in ipairs(list) do
+                local function UpdateOptions(newList)
+                    for _, child in pairs(optionsFrame:GetChildren()) do
+                        if child:IsA("TextButton") then child:Destroy() end
+                    end
+                    for _, optionName in ipairs(newList) do
                     local optionButton = Instance.new("TextButton")
                     optionButton.Name = optionName
                     optionButton.Parent = optionsFrame
@@ -1934,6 +1938,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     optionButton.MouseEnter:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.Hover end)
                     optionButton.MouseLeave:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.ElementBack end)
                 end
+                end
+
+                UpdateOptions(list)
     
                 dropdownButton.MouseButton1Click:Connect(function()
                     toggleDropdown(not optionsFrame.Visible)
@@ -1943,6 +1950,16 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                         end
                     end
                 end)
+
+                local api = {}
+                function api:Refresh(newList, keepSelection)
+                    if not keepSelection then
+                        selectedItems = {}
+                        dropdownButton.Text = (isMultiSelect and "Select") or (newList[1] or "Select")
+                    end
+                    UpdateOptions(newList)
+                end
+                return api
             end
 
             return section
@@ -2412,7 +2429,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
             end
 
-            for _, optionName in ipairs(list) do
+            local function UpdateOptions(newList)
+                for _, child in pairs(optionsFrame:GetChildren()) do
+                    if child:IsA("TextButton") then child:Destroy() end
+                end
+                for _, optionName in ipairs(newList) do
                 local optionButton = Instance.new("TextButton")
                 optionButton.Name = optionName
                 optionButton.Parent = optionsFrame
@@ -2479,6 +2500,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionButton.MouseEnter:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.Hover end)
                 optionButton.MouseLeave:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.ElementBack end)
             end
+            end
+
+            UpdateOptions(list)
 
             dropdownButton.MouseButton1Click:Connect(function()
                 toggleDropdown(not optionsFrame.Visible)
@@ -2488,6 +2512,16 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end
                 end
             end)
+
+            local api = {}
+            function api:Refresh(newList, keepSelection)
+                if not keepSelection then
+                    selectedItems = {}
+                    dropdownButton.Text = (isMultiSelect and "Select") or (newList[1] or "Select")
+                end
+                UpdateOptions(newList)
+            end
+            return api
         end
 
         sidebar2.MouseButton1Click:Connect(function()
