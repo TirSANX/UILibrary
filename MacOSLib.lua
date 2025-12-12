@@ -2271,6 +2271,12 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             local selectedItems = {}
             local isMultiSelect = multi or false
 
+            if isMultiSelect and type(defaultValue) == "table" then
+                for _, v in pairs(defaultValue) do
+                    selectedItems[v] = true
+                end
+            end
+
             local dropdownButton = Instance.new("TextButton")
             dropdownButton.Name = "DropdownButton"
             dropdownButton.Parent = dropdown
@@ -2282,6 +2288,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             dropdownButton.Size = UDim2.new(0.5, 0, 1, -6)
             dropdownButton.Font = Theme.Fonts.Body
             dropdownButton.Text = (isMultiSelect and "Select") or (defaultValue or list[1] or "Select")
+            if isMultiSelect and type(defaultValue) == "table" and #defaultValue > 0 then
+                dropdownButton.Text = table.concat(defaultValue, ", ")
+            else
+                dropdownButton.Text = (not isMultiSelect and (defaultValue or list[1])) or "Select"
+            end
             dropdownButton.TextColor3 = Theme.Colors.Text
             dropdownButton.TextSize = 14
             dropdownButton.ZIndex = 8
@@ -2375,6 +2386,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     tween.Completed:Connect(function() 
                         optionsFrame.Visible = false
                         optionsFrame.Parent = dropdown 
+                        if optionsFrame.Parent then
+                            optionsFrame.Visible = false
+                            optionsFrame.Parent = dropdown 
+                        end
                     end)
                     tween:Play()
                 end
