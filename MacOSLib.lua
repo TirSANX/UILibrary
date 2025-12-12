@@ -91,27 +91,31 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     local originalPosition
 
     if syn then
-        if CoreGui:FindFirstChild("ScreenGui") and deleteprevious then
-            tp(CoreGui.ScreenGui.main, CoreGui.ScreenGui.main.Position + UDim2.new(0, 0, 2, 0), 0.5)
-            Debris:AddItem(CoreGui.ScreenGui, 1)
+        if CoreGui:FindFirstChild("AegisLib") and deleteprevious then
+            tp(CoreGui.AegisLib.main, CoreGui.AegisLib.main.Position + UDim2.new(0, 0, 2, 0), 0.5)
+            Debris:AddItem(CoreGui.AegisLib, 1)
         end
         scrgui = Instance.new("ScreenGui")
+        scrgui.Name = "AegisLib"
+        
         syn.protect_gui(scrgui)
         scrgui.Parent = CoreGui
     elseif gethui then
         local hui = gethui()
-        if hui:FindFirstChild("ScreenGui") and deleteprevious then
-            hui.ScreenGui.main:TweenPosition(hui.ScreenGui.main.Position + UDim2.new(0, 0, 2, 0), "InOut", "Quart", 0.5)
-            Debris:AddItem(hui.ScreenGui, 1)
+        if hui:FindFirstChild("AegisLib") and deleteprevious then
+            hui.AegisLib.main:TweenPosition(hui.AegisLib.main.Position + UDim2.new(0, 0, 2, 0), "InOut", "Quart", 0.5)
+            Debris:AddItem(hui.AegisLib, 1)
         end
         scrgui = Instance.new("ScreenGui")
+        scrgui.Name = "AegisLib"
         scrgui.Parent = hui
     else
-        if CoreGui:FindFirstChild("ScreenGui") and deleteprevious then
-            tp(CoreGui.ScreenGui.main, CoreGui.ScreenGui.main.Position + UDim2.new(0, 0, 2, 0), 0.5)
-            Debris:AddItem(CoreGui.ScreenGui, 1)
+        if CoreGui:FindFirstChild("AegisLib") and deleteprevious then
+            tp(CoreGui.AegisLib.main, CoreGui.AegisLib.main.Position + UDim2.new(0, 0, 2, 0), 0.5)
+            Debris:AddItem(CoreGui.AegisLib, 1)
         end
         scrgui = Instance.new("ScreenGui")
+        scrgui.Name = "AegisLib"
         scrgui.Parent = CoreGui
     end
 
