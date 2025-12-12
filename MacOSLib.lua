@@ -1248,7 +1248,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             end
 
             -- 2. Determine layout parameters
-            local splitThreshold = 2 -- How many items are needed to justify splitting
+            local splitThreshold = 1 -- How many items are needed to justify splitting
             local itemCount = #allItems
             local workareaWidth = workareamain.AbsoluteSize.X
             local minColumnWidth = 300
