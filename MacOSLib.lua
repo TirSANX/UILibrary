@@ -1724,7 +1724,16 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 updateSlider(currentValue, false)
             end
 
-            function section:Dropdown(name, list, multi, callback)
+            function section:Dropdown(name, list, multi, p4, p5)
+                local defaultValue, callback
+                if type(p4) == 'function' and p5 == nil then
+                    defaultValue = nil
+                    callback = p4
+                else
+                    defaultValue = p4
+                    callback = p5
+                end
+
                 sectionLayoutOrderCounter = sectionLayoutOrderCounter + 1
                 local dropdown = Instance.new("TextLabel")
                 dropdown.Name = "dropdown"
@@ -1749,7 +1758,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 dropdownButton.AnchorPoint = Vector2.new(0, 0.5)
                 dropdownButton.Size = UDim2.new(0.5, 0, 1, -6)
                 dropdownButton.Font = Theme.Fonts.Body
-                dropdownButton.Text = (isMultiSelect and "Select") or (list[1] or "Select")
+                dropdownButton.Text = (isMultiSelect and "Select") or (defaultValue or list[1] or "Select")
                 dropdownButton.TextColor3 = Theme.Colors.Text
                 dropdownButton.TextSize = 14
                 dropdownButton.ZIndex = 8
@@ -2236,8 +2245,16 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             updateSlider(currentValue, false)
         end
 
+        function sec:Dropdown(name, list, multi, p4, p5)
+            local defaultValue, callback
+            if type(p4) == 'function' and p5 == nil then
+                defaultValue = nil
+                callback = p4
+            else
+                defaultValue = p4
+                callback = p5
+            end
 
-        function sec:Dropdown(name, list, multi, callback)
             layoutOrderCounter = layoutOrderCounter + 1
             local dropdown = Instance.new("TextLabel")
             dropdown.Name = "dropdown"
@@ -2264,7 +2281,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             dropdownButton.AnchorPoint = Vector2.new(0, 0.5)
             dropdownButton.Size = UDim2.new(0.5, 0, 1, -6)
             dropdownButton.Font = Theme.Fonts.Body
-            dropdownButton.Text = (isMultiSelect and "Select") or (list[1] or "Select")
+            dropdownButton.Text = (isMultiSelect and "Select") or (defaultValue or list[1] or "Select")
             dropdownButton.TextColor3 = Theme.Colors.Text
             dropdownButton.TextSize = 14
             dropdownButton.ZIndex = 8
