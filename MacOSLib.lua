@@ -1797,7 +1797,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 arrow.Image = "rbxassetid://3926305904"
                 arrow.ImageColor3 = Theme.Colors.Text
     
-                local optionsFrame = Instance.new("ScrollingFrame")
+                local optionsFrame = Instance.new("Frame")
                 optionsFrame.Name = "OptionsFrame"
                 optionsFrame.Parent = dropdown
                 optionsFrame.BackgroundColor3 = Theme.Colors.SectionBack
@@ -1807,13 +1807,58 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionsFrame.Size = UDim2.new(0.5, 0, 0, 0) 
                 optionsFrame.Visible = false
                 optionsFrame.ZIndex = 20
-                optionsFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-                optionsFrame.ScrollBarThickness = 2
+                optionsFrame.ClipsDescendants = true
                 
                 local uc_options = Instance.new("UICorner", optionsFrame)
                 uc_options.CornerRadius = Theme.Sizes.SmallRadius
-    
-                local listLayout = Instance.new("UIListLayout", optionsFrame)
+
+                local searchContainer = Instance.new("Frame")
+                searchContainer.Name = "SearchContainer"
+                searchContainer.Parent = optionsFrame
+                searchContainer.BackgroundColor3 = Theme.Colors.ElementBack
+                searchContainer.Position = UDim2.new(0, 5, 0, 5)
+                searchContainer.Size = UDim2.new(1, -10, 0, 25)
+                searchContainer.ZIndex = 21
+                local uc_search = Instance.new("UICorner", searchContainer)
+                uc_search.CornerRadius = Theme.Sizes.SmallRadius
+
+                local searchIcon = Instance.new("ImageLabel")
+                searchIcon.Name = "SearchIcon"
+                searchIcon.Parent = searchContainer
+                searchIcon.BackgroundTransparency = 1
+                searchIcon.Size = UDim2.new(0, 14, 0, 14)
+                searchIcon.Position = UDim2.new(0, 6, 0.5, 0)
+                searchIcon.AnchorPoint = Vector2.new(0, 0.5)
+                searchIcon.Image = "rbxassetid://5036466001"
+                searchIcon.ImageColor3 = Theme.Colors.Text
+                searchIcon.ZIndex = 22
+
+                local searchBar = Instance.new("TextBox")
+                searchBar.Name = "SearchBar"
+                searchBar.Parent = searchContainer
+                searchBar.BackgroundTransparency = 1
+                searchBar.Position = UDim2.new(0, 26, 0, 0)
+                searchBar.Size = UDim2.new(1, -30, 1, 0)
+                searchBar.Font = Theme.Fonts.Body
+                searchBar.PlaceholderText = "Search..."
+                searchBar.Text = ""
+                searchBar.TextColor3 = Theme.Colors.Text
+                searchBar.TextSize = 14
+                searchBar.TextXAlignment = Enum.TextXAlignment.Left
+                searchBar.ZIndex = 22
+
+                local scrollingList = Instance.new("ScrollingFrame")
+                scrollingList.Name = "ScrollingList"
+                scrollingList.Parent = optionsFrame
+                scrollingList.BackgroundTransparency = 1
+                scrollingList.Position = UDim2.new(0, 0, 0, 35)
+                scrollingList.Size = UDim2.new(1, 0, 1, -35)
+                scrollingList.AutomaticCanvasSize = Enum.AutomaticSize.Y
+                scrollingList.CanvasSize = UDim2.new(0, 0, 0, 0)
+                scrollingList.ScrollBarThickness = 2
+                scrollingList.ZIndex = 21
+
+                local listLayout = Instance.new("UIListLayout", scrollingList)
                 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
     
                 local outsideClickListener, positionUpdaterConnection
@@ -1838,7 +1883,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
      
                         optionsFrame.Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 0)
                         optionsFrame.Visible = true
-                        TweenService:Create(optionsFrame, TweenInfo.new(0.2), {Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 120)}):Play()
+                        TweenService:Create(optionsFrame, TweenInfo.new(0.2), {Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 160)}):Play()
                         TweenService:Create(arrow, TweenInfo.new(0.2), {Rotation = 180}):Play()
     
                         if main then
@@ -1870,13 +1915,13 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
     
                 local function UpdateOptions(newList)
-                    for _, child in pairs(optionsFrame:GetChildren()) do
+                    for _, child in pairs(scrollingList:GetChildren()) do
                         if child:IsA("TextButton") then child:Destroy() end
                     end
                     for _, optionName in ipairs(newList) do
                     local optionButton = Instance.new("TextButton")
                     optionButton.Name = optionName
-                    optionButton.Parent = optionsFrame
+                    optionButton.Parent = scrollingList
                     optionButton.BackgroundColor3 = Theme.Colors.ElementBack
                     optionButton.Size = UDim2.new(1, 0, 0, 30)
                     optionButton.BorderSizePixel = 0
@@ -1940,11 +1985,24 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
                 end
 
+                searchBar:GetPropertyChangedSignal("Text"):Connect(function()
+                    local text = searchBar.Text:lower()
+                    for _, button in ipairs(scrollingList:GetChildren()) do
+                        if button:IsA("TextButton") then
+                            if button.Name:lower():find(text, 1, true) then
+                                button.Visible = true
+                            else
+                                button.Visible = false
+                            end
+                        end
+                    end
+                end)
+
                 UpdateOptions(list)
     
                 dropdownButton.MouseButton1Click:Connect(function()
                     toggleDropdown(not optionsFrame.Visible)
-                    for _, button in ipairs(optionsFrame:GetChildren()) do
+                    for _, button in ipairs(scrollingList:GetChildren()) do
                         if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
                             button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
                         end
@@ -2348,12 +2406,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             arrow.Image = "rbxassetid://3926305904"
             arrow.ImageColor3 = Theme.Colors.Text
 
-            local optionsFrame = Instance.new("ScrollingFrame")
+            local optionsFrame = Instance.new("Frame")
 
             optionsFrame.Name = "OptionsFrame"
             optionsFrame.Parent = dropdown
-            optionsFrame.BackgroundColor3 = (Theme.Colors.Gray)
-            optionsFrame.BackgroundTransparency = 0.1
             optionsFrame.BackgroundColor3 = Theme.Colors.SectionBack
             optionsFrame.BorderSizePixel = 0
 
@@ -2362,14 +2418,59 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             optionsFrame.Size = UDim2.new(0.5, 0, 0, 0) 
             optionsFrame.Visible = false
             optionsFrame.ZIndex = 20
-            optionsFrame.AutomaticCanvasSize = Enum.AutomaticSize.Y
-            optionsFrame.ScrollBarThickness = 2
+            optionsFrame.ClipsDescendants = true
             
 
             local uc_options = Instance.new("UICorner", optionsFrame)
             uc_options.CornerRadius = Theme.Sizes.SmallRadius
 
-            local listLayout = Instance.new("UIListLayout", optionsFrame)
+            local searchContainer = Instance.new("Frame")
+            searchContainer.Name = "SearchContainer"
+            searchContainer.Parent = optionsFrame
+            searchContainer.BackgroundColor3 = Theme.Colors.ElementBack
+            searchContainer.Position = UDim2.new(0, 5, 0, 5)
+            searchContainer.Size = UDim2.new(1, -10, 0, 25)
+            searchContainer.ZIndex = 21
+            local uc_search = Instance.new("UICorner", searchContainer)
+            uc_search.CornerRadius = Theme.Sizes.SmallRadius
+
+            local searchIcon = Instance.new("ImageLabel")
+            searchIcon.Name = "SearchIcon"
+            searchIcon.Parent = searchContainer
+            searchIcon.BackgroundTransparency = 1
+            searchIcon.Size = UDim2.new(0, 14, 0, 14)
+            searchIcon.Position = UDim2.new(0, 6, 0.5, 0)
+            searchIcon.AnchorPoint = Vector2.new(0, 0.5)
+            searchIcon.Image = "rbxassetid://5036466001"
+            searchIcon.ImageColor3 = Theme.Colors.Text
+            searchIcon.ZIndex = 22
+
+            local searchBar = Instance.new("TextBox")
+            searchBar.Name = "SearchBar"
+            searchBar.Parent = searchContainer
+            searchBar.BackgroundTransparency = 1
+            searchBar.Position = UDim2.new(0, 26, 0, 0)
+            searchBar.Size = UDim2.new(1, -30, 1, 0)
+            searchBar.Font = Theme.Fonts.Body
+            searchBar.PlaceholderText = "Search..."
+            searchBar.Text = ""
+            searchBar.TextColor3 = Theme.Colors.Text
+            searchBar.TextSize = 14
+            searchBar.TextXAlignment = Enum.TextXAlignment.Left
+            searchBar.ZIndex = 22
+
+            local scrollingList = Instance.new("ScrollingFrame")
+            scrollingList.Name = "ScrollingList"
+            scrollingList.Parent = optionsFrame
+            scrollingList.BackgroundTransparency = 1
+            scrollingList.Position = UDim2.new(0, 0, 0, 35)
+            scrollingList.Size = UDim2.new(1, 0, 1, -35)
+            scrollingList.AutomaticCanvasSize = Enum.AutomaticSize.Y
+            scrollingList.CanvasSize = UDim2.new(0, 0, 0, 0)
+            scrollingList.ScrollBarThickness = 2
+            scrollingList.ZIndex = 21
+
+            local listLayout = Instance.new("UIListLayout", scrollingList)
             listLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
             local outsideClickListener, positionUpdaterConnection
@@ -2394,7 +2495,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
  
                     optionsFrame.Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 0)
                     optionsFrame.Visible = true
-                    TweenService:Create(optionsFrame, TweenInfo.new(0.2), {Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 120)}):Play()
+                    TweenService:Create(optionsFrame, TweenInfo.new(0.2), {Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 160)}):Play()
                     TweenService:Create(arrow, TweenInfo.new(0.2), {Rotation = 180}):Play()
 
                     if main then
@@ -2430,15 +2531,13 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             end
 
             local function UpdateOptions(newList)
-                for _, child in pairs(optionsFrame:GetChildren()) do
+                for _, child in pairs(scrollingList:GetChildren()) do
                     if child:IsA("TextButton") then child:Destroy() end
                 end
                 for _, optionName in ipairs(newList) do
                 local optionButton = Instance.new("TextButton")
                 optionButton.Name = optionName
-                optionButton.Parent = optionsFrame
-                optionButton.BackgroundColor3 = Theme.Colors.LightGray
-                optionButton.Parent = optionsFrame                
+                optionButton.Parent = scrollingList
                 optionButton.BackgroundColor3 = Theme.Colors.ElementBack
                 optionButton.Size = UDim2.new(1, 0, 0, 30)
                 optionButton.BorderSizePixel = 0
@@ -2502,11 +2601,24 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             end
             end
 
+            searchBar:GetPropertyChangedSignal("Text"):Connect(function()
+                local text = searchBar.Text:lower()
+                for _, button in ipairs(scrollingList:GetChildren()) do
+                    if button:IsA("TextButton") then
+                        if button.Name:lower():find(text, 1, true) then
+                            button.Visible = true
+                        else
+                            button.Visible = false
+                        end
+                    end
+                end
+            end)
+
             UpdateOptions(list)
 
             dropdownButton.MouseButton1Click:Connect(function()
                 toggleDropdown(not optionsFrame.Visible)
-                for _, button in ipairs(optionsFrame:GetChildren()) do
+                for _, button in ipairs(scrollingList:GetChildren()) do
                     if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
                         button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
                     end
