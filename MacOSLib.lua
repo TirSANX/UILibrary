@@ -1858,6 +1858,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 scrollingList.ScrollBarThickness = 8
                 scrollingList.ScrollBarImageTransparency = 0
                 scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
+                scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
                 scrollingList.ZIndex = 21
 
                 local listLayout = Instance.new("UIListLayout", scrollingList)
@@ -2472,6 +2473,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             scrollingList.ScrollBarThickness = 8
             scrollingList.ScrollBarImageTransparency = 0
             scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
+            scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
             scrollingList.ZIndex = 21
 
             local listLayout = Instance.new("UIListLayout", scrollingList)
