@@ -1859,7 +1859,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 scrollingList.ScrollBarImageTransparency = 0
                 scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
                 scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
-                scrollingList.ZIndex = 21
+                scrollingList.ZIndex = 35
 
                 local listLayout = Instance.new("UIListLayout", scrollingList)
                 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -2474,7 +2474,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             scrollingList.ScrollBarImageTransparency = 0
             scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
             scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
-            scrollingList.ZIndex = 21
+            scrollingList.ZIndex = 35
 
             local listLayout = Instance.new("UIListLayout", scrollingList)
             listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -2548,7 +2548,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionButton.Size = UDim2.new(1, 0, 0, 30)
                 optionButton.BorderSizePixel = 0
                 optionButton.Text = ""
-                optionButton.ZIndex = 9
+                optionButton.ZIndex = 36
 
                 local checkmark = Instance.new("Frame", optionButton)
                 checkmark.Name = "Checkmark"
