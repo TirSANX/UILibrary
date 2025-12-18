@@ -1855,7 +1855,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 scrollingList.Size = UDim2.new(1, 0, 1, -35)
                 scrollingList.AutomaticCanvasSize = Enum.AutomaticSize.Y
                 scrollingList.CanvasSize = UDim2.new(0, 0, 0, 0)
-                scrollingList.ScrollBarThickness = 6
+                scrollingList.ScrollBarThickness = 8
+                scrollingList.ScrollBarImageTransparency = 0
                 scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
                 scrollingList.ZIndex = 21
 
@@ -2468,7 +2469,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             scrollingList.Size = UDim2.new(1, 0, 1, -35)
             scrollingList.AutomaticCanvasSize = Enum.AutomaticSize.Y
             scrollingList.CanvasSize = UDim2.new(0, 0, 0, 0)
-            scrollingList.ScrollBarThickness = 6
+            scrollingList.ScrollBarThickness = 8
+            scrollingList.ScrollBarImageTransparency = 0
             scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
             scrollingList.ZIndex = 21
 
