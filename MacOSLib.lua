@@ -1963,8 +1963,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                             checkmark.Visible = selectedItems[optionName]
     
                             local result = {}
-                            for item, selected in pairs(selectedItems) do
-                                if selected then table.insert(result, item) end
+                            for _, item in ipairs(newList) do
+                                if selectedItems[item] then table.insert(result, item) end
                             end
     
                             if #result > 0 then
@@ -2582,8 +2582,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                         checkmark.Visible = selectedItems[optionName]
 
                         local result = {}
-                        for item, selected in pairs(selectedItems) do
-                            if selected then table.insert(result, item) end
+                        for _, item in ipairs(newList) do
+                            if selectedItems[item] then table.insert(result, item) end
                         end
 
                         if #result > 0 then
