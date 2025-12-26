@@ -396,22 +396,12 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     workareacornerhider.BorderSizePixel = 0
     workareacornerhider.Size = UDim2.new(0, 18, 1, 0)
 
-    logo = Instance.new("ImageLabel")
-    logo.Name = "Logo"
-    logo.Parent = main
-    logo.BackgroundTransparency = 1
-    logo.Image = "rbxassetid://131523188424149"
-    logo.Size = UDim2.new(0, 150, 0, 100)
-    logo.Position = UDim2.new(0, (sidebarWidth / 2) - 5, 0, 60)
-    logo.AnchorPoint = Vector2.new(0.4, 0)
-    logo.ZIndex = 2
-
     search = Instance.new("Frame")
     search.Name = "search"
     search.Parent = main
     search.BackgroundColor3 = Theme.Colors.LightGray
     search.BackgroundColor3 = Theme.Colors.ElementBack
-    search.Position = UDim2.new(0, (sidebarWidth / 2), 0, 170)
+    search.Position = UDim2.new(0, (sidebarWidth / 2), 0, 60)
     search.AnchorPoint = Vector2.new(0.5, 0)
     search.Size = UDim2.new(0, sidebarWidth - 30, 0, 34)
 
@@ -482,9 +472,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     sidebar.BackgroundTransparency = 0
     sidebar.BackgroundColor3 = Theme.Colors.MainBack
     sidebar.BorderSizePixel = 0
-    sidebar.Position = UDim2.new(0, 10, 0, 214)
+    sidebar.Position = UDim2.new(0, 10, 0, 104)
 
-    sidebar.Size = UDim2.new(0, sidebarWidth - 15, 1, -229) 
+    sidebar.Size = UDim2.new(0, sidebarWidth - 15, 1, -119) 
     sidebar.AutomaticCanvasSize = "Y"
     sidebar.CanvasSize = UDim2.new(0, 0, 0, 0)
     sidebar.ScrollBarThickness = 3
