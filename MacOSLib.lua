@@ -15,10 +15,10 @@ local Theme = {
         SectionBack = Color3.fromRGB(35, 35, 40),    -- Collapsible Section Background
         ElementBack = Color3.fromRGB(45, 45, 50),    -- Buttons, Inputs etc.
         Text = Color3.fromRGB(220, 220, 220),        -- Main Text
-        Primary = Color3.fromRGB(60, 60, 75),        -- Accent Color
+        Primary = Color3.fromRGB(220, 20, 60),       -- Accent Color (Crimson Red)
         Hover = Color3.fromRGB(55, 55, 60),          -- Hover Color
         Border = Color3.fromRGB(60, 60, 65),         -- Border Color
-        PrimaryLight = Color3.fromRGB(80, 80, 95),   -- Lighter Accent
+        PrimaryLight = Color3.fromRGB(255, 80, 100), -- Lighter Accent (Crimson Red)
 
         -- Aliases & Specifics
         TextDark = Color3.fromRGB(220, 220, 220),    -- Alias for new Text
@@ -618,6 +618,7 @@ local Debris = game:GetService("Debris")
 local RunService = game:GetService("RunService")
 local CollectionService = game:GetService("CollectionService")
 
+
 local lib = {}
 local sections = {}
 local workareas = {}
@@ -760,10 +761,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
         progressBar = Instance.new("Frame", progressBarTrack)
         progressBar.Size = UDim2.new(0, 0, 1, 0)
-        progressBar.BackgroundColor3 = Color3.fromRGB(139, 92, 246)
+        progressBar.BackgroundColor3 = Theme.Colors.Primary
         progressBar.ZIndex = 1002
         
-        createGradient(progressBar, Color3.fromRGB(139, 92, 246), Color3.fromRGB(160, 120, 255))
+        createGradient(progressBar, Theme.Colors.Primary, Theme.Colors.PrimaryLight)
 
         local uc_progress_bar = Instance.new("UICorner", progressBar)
         uc_progress_bar.CornerRadius = Theme.Sizes.FullRadius
@@ -847,23 +848,24 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
     end)
 
-    local SettingsBtn = Instance.new("TextButton")
+    local SettingsBtn = Instance.new("ImageButton")
     SettingsBtn.Name = "Settings"
     SettingsBtn.Parent = TopBar
     SettingsBtn.BackgroundTransparency = 1
     SettingsBtn.Position = UDim2.new(1, -10, 0.5, 0)
     SettingsBtn.AnchorPoint = Vector2.new(1, 0.5)
-    SettingsBtn.Size = UDim2.new(0, 60, 0, 20)
-    SettingsBtn.Font = Theme.Fonts.Body
-    SettingsBtn.Text = "Settings"
-    SettingsBtn.TextColor3 = Theme.Colors.Text
-    SettingsBtn.TextSize = 13
+    SettingsBtn.Size = UDim2.new(0, 20, 0, 20)
+    SettingsBtn.Image = Theme.Icons["settings"]
+    SettingsBtn.ImageColor3 = Theme.Colors.Text
     SettingsBtn.ZIndex = 16
     
+    local settingsClickCallback
     SettingsBtn.MouseButton1Click:Connect(function()
-         window:Notify("Settings", "Settings menu clicked!", "OK", "rbxassetid://3926305904")
+        if settingsClickCallback then
+            settingsClickCallback()
+        end
     end)
-
+    
     local mainStroke = Instance.new("UIStroke")
     mainStroke.Parent = mainFloatingBorder
     mainStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
@@ -1661,6 +1663,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
         notif2button1.BackgroundColor3 = b1Color or Theme.Colors.Primary
         
+        if not b1Color then CollectionService:AddTag(notif2button1, "Theme_Primary_BackgroundColor3") end
         local con1, con2
         con1 = notif2button1.MouseButton1Click:Connect(function()
             con1:Disconnect()
@@ -1712,15 +1715,17 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
         local selectionBar = Instance.new("Frame")
         selectionBar.Name = "SelectionBar"
-        selectionBar.Parent = sidebar2
-        selectionBar.BackgroundColor3 = Color3.fromRGB(139, 92, 246)
+        selectionBar.Parent = sidebar2 
+        selectionBar.BackgroundColor3 = Theme.Colors.Primary
         selectionBar.BorderSizePixel = 0
         selectionBar.Size = UDim2.new(0, 3, 0.8, 0)
         selectionBar.Position = UDim2.new(1, -3, 0.1, 0)
         selectionBar.Visible = false
+        CollectionService:AddTag(selectionBar, "Theme_Primary_BackgroundColor3")
         local sbCorner = Instance.new("UICorner", selectionBar)
         sbCorner.CornerRadius = Theme.Sizes.FullRadius
-        createGradient(selectionBar, Color3.fromRGB(139, 92, 246), Color3.fromRGB(160, 120, 255))
+        local grad = createGradient(selectionBar, Theme.Colors.Primary, Theme.Colors.PrimaryLight)
+        CollectionService:AddTag(grad, "Theme_Primary_Gradient")
 
 
         local sectionIcon = Instance.new("ImageLabel")
@@ -1732,7 +1737,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         sectionIcon.Size = UDim2.new(0, 22, 0, 22)
         sectionIcon.ZIndex = 3
         sectionIcon.Image = Theme.Icons[icon] or icon
-        sectionIcon.ImageColor3 = Theme.Colors.Text
+        sectionIcon.ImageColor3 = Theme.Colors.Primary
         sectionIcon.ScaleType = Enum.ScaleType.Fit
         
 
@@ -1742,7 +1747,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         sectionTitle.BackgroundTransparency = 1
         sectionTitle.Font = Theme.Fonts.Title
         sectionTitle.Text = name
-        sectionTitle.TextColor3 = Theme.Colors.Text
+        sectionTitle.TextColor3 = Theme.Colors.Primary
         sectionTitle.TextSize = 18
         sectionTitle.TextXAlignment = Enum.TextXAlignment.Left
         sectionTitle.ZIndex = 3
@@ -1807,9 +1812,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local subtitle = v:FindFirstChild("SectionSubtitle")
                 local iconInstance = v:FindFirstChild("SectionIcon")
 
-                if title then title.TextColor3 = Theme.Colors.Text end
+                if title then title.TextColor3 = Theme.Colors.Primary end
                 if subtitle then subtitle.TextColor3 = Theme.Colors.Gray end
-                if iconInstance then iconInstance.ImageColor3 = Theme.Colors.Text end
+                if iconInstance then iconInstance.ImageColor3 = Theme.Colors.Primary end
             end
             
 
@@ -1818,9 +1823,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             local currentSubtitle = sidebar2:FindFirstChild("SectionSubtitle")
             local selectedIcon = sidebar2:FindFirstChild("SectionIcon")
 
-            if currentTitle then currentTitle.TextColor3 = Theme.Colors.TextDark end
+            if currentTitle then currentTitle.TextColor3 = Theme.Colors.Primary end
             if currentSubtitle then currentSubtitle.TextColor3 = Theme.Colors.Text end
-            if selectedIcon then selectedIcon.ImageColor3 = Color3.fromRGB(139, 92, 246) end
+            if selectedIcon then selectedIcon.ImageColor3 = Theme.Colors.Primary end
+            CollectionService:AddTag(selectedIcon, "Theme_Primary_ImageColor3")
 
 
             if activeWorkarea ~= workareamain then
@@ -2155,6 +2161,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 ToggleIndicator.AnchorPoint = Vector2.new(1, 0.5)
                 ToggleIndicator.BackgroundColor3 = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                 ToggleIndicator.Position = UDim2.new(1, -10, 0.5, 0)
+                CollectionService:AddTag(ToggleIndicator, "Theme_Primary_BackgroundColor3_Switch")
                 ToggleIndicator.Size = UDim2.new(0, 36, 0, 18)
                 local indCorner = Instance.new("UICorner", ToggleIndicator)
                 indCorner.CornerRadius = UDim.new(1,0)
@@ -2551,6 +2558,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     checkmark.Size = UDim2.new(0, 8, 0, 8)
                     checkmark.Position = UDim2.new(0, 15, 0.5, -4)
                     checkmark.Visible = false
+                    CollectionService:AddTag(checkmark, "Theme_Primary_BackgroundColor3")
                     checkmark.ZIndex = 24
                     local uc_check = Instance.new("UICorner", checkmark)
                     uc_check.CornerRadius = UDim.new(1, 0)
@@ -3260,6 +3268,39 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end)
 
         return sec
+    end
+
+    function window:OnSettingsClick(callback)
+        settingsClickCallback = callback
+    end
+
+    function window:SetAccentColor(newColor)
+        local oldPrimary = Theme.Colors.Primary
+        local newLightColor = Color3.new(
+            math.min(1, newColor.R * 1.2 + 0.1),
+            math.min(1, newColor.G * 1.2 + 0.1),
+            math.min(1, newColor.B * 1.2 + 0.1)
+        )
+        Theme.Colors.Primary = newColor
+        Theme.Colors.PrimaryLight = newLightColor
+
+        for _, instance in ipairs(CollectionService:GetTagged("Theme_Primary_BackgroundColor3") or {}) do
+            if instance and instance.Parent then instance.BackgroundColor3 = newColor end
+        end
+        for _, instance in ipairs(CollectionService:GetTagged("Theme_Primary_ImageColor3") or {}) do
+            if instance and instance.Parent then instance.ImageColor3 = newColor end
+        end
+        for _, instance in ipairs(CollectionService:GetTagged("Theme_Primary_BackgroundColor3_Switch") or {}) do
+            if instance and instance.Parent and instance.BackgroundColor3 == oldPrimary then instance.BackgroundColor3 = newColor end
+        end
+        for _, instance in ipairs(CollectionService:GetTagged("Theme_Primary_Gradient") or {}) do
+            if instance and instance.Parent and instance:IsA("UIGradient") then
+                instance.Color = ColorSequence.new({
+                    ColorSequenceKeypoint.new(0, newColor),
+                    ColorSequenceKeypoint.new(1, newLightColor)
+                })
+            end
+        end
     end
 
     return window
