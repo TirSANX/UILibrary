@@ -624,7 +624,7 @@ local sections = {}
 local workareas = {}
 local sectionAPIs = {}
 local notifs = {}
-local visible = true
+local visible = false
 local dbcooper = false
 
 local function tp(ins, pos, time)
@@ -834,6 +834,19 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     topbarFiller.Position = UDim2.new(0, 0, 0.5, 0)
     topbarFiller.ZIndex = 15
 
+    local titleLabel = Instance.new("TextLabel")
+    titleLabel.Name = "Title"
+    titleLabel.Parent = TopBar
+    titleLabel.BackgroundTransparency = 1
+    titleLabel.Position = UDim2.new(0, 0, 0, 0)
+    titleLabel.Size = UDim2.new(1, 0, 1, 0)
+    titleLabel.Font = Theme.Fonts.Title
+    titleLabel.Text = (ti or "UI Library") .. "   " .. (sub_ti or "User Interface")
+    titleLabel.TextColor3 = Theme.Colors.Text
+    titleLabel.TextSize = 14
+    titleLabel.TextXAlignment = Enum.TextXAlignment.Center
+    titleLabel.ZIndex = 16
+
     TopBar.InputBegan:Connect(function(input)
         if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
             dragging = true
@@ -857,7 +870,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     SettingsBtn.Size = UDim2.new(0, 20, 0, 20)
     SettingsBtn.Image = Theme.Icons["settings"]
     SettingsBtn.ImageColor3 = Theme.Colors.Text
-    SettingsBtn.ZIndex = 16
+    SettingsBtn.ZIndex = 17
     
     local settingsClickCallback
     SettingsBtn.MouseButton1Click:Connect(function()
@@ -906,10 +919,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     local hiLogo = Instance.new("ImageLabel", hiBackground)
     hiLogo.BackgroundTransparency = 1
     hiLogo.Size = UDim2.new(0, indicatorHeight, 0, indicatorHeight)
-    hiLogo.Position = UDim2.new(0, 0, 0.5, 0)
-    hiLogo.AnchorPoint = Vector2.new(0, 0.5)
+    hiLogo.Position = UDim2.new(0, indicatorHeight / 2, 0.5, 0)
+    hiLogo.AnchorPoint = Vector2.new(0.5, 0.5)
     hiLogo.Image = "rbxassetid://101129417614969"
     hiLogo.ZIndex = 10 
+    local hiLogoScale = Instance.new("UIScale", hiLogo)
 
     local hiText = Instance.new("TextLabel", hiBackground)
     hiText.BackgroundTransparency = 1
@@ -941,6 +955,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     end)
 
     hiddenIndicator.MouseButton1Click:Connect(function()
+        hiLogo.Rotation = 0
+        hiLogoScale.Scale = 0.6
+        TweenService:Create(hiLogo, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Rotation = 360}):Play()
+        TweenService:Create(hiLogoScale, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
         window:ToggleVisible()
     end)
 
@@ -973,9 +991,14 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     miLogo.Position = UDim2.new(0.5, 0, 0.5, 0)
     miLogo.AnchorPoint = Vector2.new(0.5, 0.5)
     miLogo.Image = "rbxassetid://101129417614969"
+    local miLogoScale = Instance.new("UIScale", miLogo)
 
     mobileIndicator.MouseButton1Click:Connect(function()
         if not visible then
+            miLogo.Rotation = 0
+            miLogoScale.Scale = 0.6
+            TweenService:Create(miLogo, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Rotation = 360}):Play()
+            TweenService:Create(miLogoScale, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
             window:ToggleVisible()
         end
     end)
@@ -1098,7 +1121,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     sidebar.Size = UDim2.new(0, sidebarWidth - 15, 1, -119) 
     sidebar.AutomaticCanvasSize = "Y"
     sidebar.CanvasSize = UDim2.new(0, 0, 0, 0)
-    sidebar.ScrollBarThickness = 3
+    sidebar.ScrollBarThickness = 2
+    sidebar.ScrollBarImageTransparency = 0.5
     sidebar.ScrollBarImageColor3 = Theme.Colors.Text
 
     local ull_2 = Instance.new("UIListLayout")
@@ -1161,6 +1185,14 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     close.AutoButtonColor = false
     close.ZIndex = 21
     close.Text = ""
+    local closeIcon = Instance.new("ImageLabel", close)
+    closeIcon.Name = "Icon"
+    closeIcon.BackgroundTransparency = 1
+    closeIcon.Size = UDim2.new(0, 10, 0, 10)
+    closeIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
+    closeIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+    closeIcon.Image = Theme.Icons["x"]
+    closeIcon.ImageTransparency = 1
     close.MouseButton1Click:Connect(function()
         window:Notify2(
             "CONFIRM CLOSE!",
@@ -1186,6 +1218,14 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     minimize.AutoButtonColor = false
     minimize.ZIndex = 21
     minimize.Text = ""
+    local minimizeIcon = Instance.new("ImageLabel", minimize)
+    minimizeIcon.Name = "Icon"
+    minimizeIcon.BackgroundTransparency = 1
+    minimizeIcon.Size = UDim2.new(0, 10, 0, 10)
+    minimizeIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
+    minimizeIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+    minimizeIcon.Image = Theme.Icons["minus"]
+    minimizeIcon.ImageTransparency = 1
 
     minimize.MouseButton1Click:Connect(function()
         if UserInputService.TouchEnabled then
@@ -1205,42 +1245,29 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     resize.AutoButtonColor = false
     resize.ZIndex = 21
     resize.Text = ""
+    local resizeIcon = Instance.new("ImageLabel", resize)
+    resizeIcon.Name = "Icon"
+    resizeIcon.BackgroundTransparency = 1
+    resizeIcon.Size = UDim2.new(0, 10, 0, 10)
+    resizeIcon.Position = UDim2.new(0.5, 0, 0.5, 0)
+    resizeIcon.AnchorPoint = Vector2.new(0.5, 0.5)
+    resizeIcon.Image = Theme.Icons["maximize-2"]
+    resizeIcon.ImageTransparency = 1
+
+    local function updateTrafficLights(hovering)
+        local target = hovering and 0.5 or 1
+        TweenService:Create(closeIcon, TweenInfo.new(0.2), {ImageTransparency = target}):Play()
+        TweenService:Create(minimizeIcon, TweenInfo.new(0.2), {ImageTransparency = target}):Play()
+        TweenService:Create(resizeIcon, TweenInfo.new(0.2), {ImageTransparency = target}):Play()
+    end
+
+    buttons.MouseEnter:Connect(function() updateTrafficLights(true) end)
+    buttons.MouseLeave:Connect(function() updateTrafficLights(false) end)
 
     local uc_20 = Instance.new("UICorner")
     uc_20.CornerRadius = Theme.Sizes.FullRadius
     uc_20.Parent = resize
     
-    local topBar = Instance.new("Frame")
-    topBar.Name = "TopBar"
-    topBar.Parent = workarea
-    topBar.BackgroundTransparency = 1
-    topBar.Position = UDim2.new(0, 20, 0, 15)
-    topBar.Size = UDim2.new(1, -40, 0, 60)
-    topBar.ZIndex = 3
-
-    local title = Instance.new("TextLabel")
-    title.Name = "title"
-    title.Parent = topBar
-    title.BackgroundTransparency = 1
-    title.Size = UDim2.new(1, 0, 0, 35)
-    title.Font = Theme.Fonts.Title
-    title.Text = ti or "UI Library"
-    title.TextColor3 = Theme.Colors.TextDark
-    title.TextSize = 30
-    title.TextXAlignment = Enum.TextXAlignment.Left
-
-    local subtitle = Instance.new("TextLabel")
-    subtitle.Name = "Subtitle"
-    subtitle.Parent = topBar
-    subtitle.BackgroundTransparency = 1
-    subtitle.Position = UDim2.new(0, 0, 0, 35)
-    subtitle.Size = UDim2.new(1, 0, 0, 20)
-    subtitle.Font = Theme.Fonts.Body
-    subtitle.Text = sub_ti or "User Interface"
-    subtitle.TextColor3 = Theme.Colors.Text
-    subtitle.TextSize = 16
-    subtitle.TextXAlignment = Enum.TextXAlignment.Left
-
     local notif = Instance.new("Frame")
     notif.Name = "notif"
     notif.Parent = main
@@ -1460,7 +1487,14 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         Debris:AddItem(loadingScreen, 0.5)
     end
 
-    tp(main, UDim2.new(0.5, 0, 0.5, 0), 0.8)
+    -- Start with UI hidden and indicator shown
+    if not UserInputService.TouchEnabled then
+        hiddenIndicator.Size = collapsedSize
+        hiddenIndicator.Visible = true
+        tp(hiddenIndicator, UDim2.new(1, -10, 0.7, 0), 0.3) 
+    else
+        mobileIndicator.Visible = true
+    end
 
     function window:ToggleVisible()
         if dbcooper then return end
@@ -1716,29 +1750,28 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         local selectionBar = Instance.new("Frame")
         selectionBar.Name = "SelectionBar"
         selectionBar.Parent = sidebar2 
-        selectionBar.BackgroundColor3 = Theme.Colors.Primary
+        selectionBar.BackgroundColor3 = Theme.Colors.ElementBack
+        selectionBar.BackgroundTransparency = 1
         selectionBar.BorderSizePixel = 0
-        selectionBar.Size = UDim2.new(0, 3, 0.8, 0)
-        selectionBar.Position = UDim2.new(1, -3, 0.1, 0)
-        selectionBar.Visible = false
-        CollectionService:AddTag(selectionBar, "Theme_Primary_BackgroundColor3")
+        selectionBar.Size = UDim2.new(1, -10, 1, -8)
+        selectionBar.Position = UDim2.new(0, 5, 0, 4)
+        selectionBar.ZIndex = 2
         local sbCorner = Instance.new("UICorner", selectionBar)
-        sbCorner.CornerRadius = Theme.Sizes.FullRadius
-        local grad = createGradient(selectionBar, Theme.Colors.Primary, Theme.Colors.PrimaryLight)
-        CollectionService:AddTag(grad, "Theme_Primary_Gradient")
+        sbCorner.CornerRadius = Theme.Sizes.SmallRadius
 
 
         local sectionIcon = Instance.new("ImageLabel")
         sectionIcon.Name = "SectionIcon"
         sectionIcon.Parent = sidebar2
         sectionIcon.BackgroundTransparency = 1
-        sectionIcon.Position = UDim2.new(0, 15, 0.5, 0)
-        sectionIcon.AnchorPoint = Vector2.new(0, 0.5)
+        sectionIcon.Position = UDim2.new(0, 26, 0.5, 0)
+        sectionIcon.AnchorPoint = Vector2.new(0.5, 0.5)
         sectionIcon.Size = UDim2.new(0, 22, 0, 22)
         sectionIcon.ZIndex = 3
         sectionIcon.Image = Theme.Icons[icon] or icon
         sectionIcon.ImageColor3 = Theme.Colors.Primary
         sectionIcon.ScaleType = Enum.ScaleType.Fit
+        local sectionIconScale = Instance.new("UIScale", sectionIcon)
         
 
         local sectionTitle = Instance.new("TextLabel")
@@ -1780,10 +1813,13 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         workareamain.BorderSizePixel = 0 
         workareamain.Position = UDim2.new(0, 20, 0, 85)
         workareamain.Size = UDim2.new(1, -40, 1, -100)
+        workareamain.Position = UDim2.new(0, 20, 0, 20)
+        workareamain.Size = UDim2.new(1, -40, 1, -40)
         workareamain.ZIndex = 3
         workareamain.AutomaticCanvasSize = "Y"
         workareamain.CanvasSize = UDim2.new(0, 0, 0, 0)
-        workareamain.ScrollBarThickness = 3
+        workareamain.ScrollBarThickness = 2
+        workareamain.ScrollBarImageTransparency = 0.5
         workareamain.ScrollBarImageColor3 = Theme.Colors.Text
         workareamain.Visible = false
         
@@ -1807,7 +1843,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         function sec:Select()
             for b, v in next, sections do
 
-                v:FindFirstChild("SelectionBar").Visible = false
+                TweenService:Create(v:FindFirstChild("SelectionBar"), TweenInfo.new(0.2), {BackgroundTransparency = 1}):Play()
                 local title = v:FindFirstChild("SectionTitle")
                 local subtitle = v:FindFirstChild("SectionSubtitle")
                 local iconInstance = v:FindFirstChild("SectionIcon")
@@ -1818,7 +1854,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             end
             
 
-            selectionBar.Visible = true 
+            TweenService:Create(selectionBar, TweenInfo.new(0.2), {BackgroundTransparency = 0}):Play()
             local currentTitle = sidebar2:FindFirstChild("SectionTitle")
             local currentSubtitle = sidebar2:FindFirstChild("SectionSubtitle")
             local selectedIcon = sidebar2:FindFirstChild("SectionIcon")
@@ -1835,15 +1871,18 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 local tweenInfo = TweenInfo.new(0.3, Enum.EasingStyle.Quart, Enum.EasingDirection.Out)
                 local targetInPosition = UDim2.new(0, 20, 0, 85)
+                local targetInPosition = UDim2.new(0, 20, 0, 20)
 
                 workareamain.ZIndex = 4
                 workareamain.Position = UDim2.new(1, 20, 0, 85)
+                workareamain.Position = UDim2.new(1, 20, 0, 20)
                 workareamain.Visible = true
                 TweenService:Create(workareamain, tweenInfo, {Position = targetInPosition}):Play()
 
 
                 if oldWorkarea then
                     local targetOutPosition = UDim2.new(-1, 20, 0, 85)
+                    local targetOutPosition = UDim2.new(-1, 20, 0, 20)
                     TweenService:Create(oldWorkarea, tweenInfo, {Position = targetOutPosition}):Play()
                     task.delay(tweenInfo.Time, function()
                         if oldWorkarea and oldWorkarea.Parent and activeWorkarea ~= oldWorkarea then
@@ -2096,12 +2135,22 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 uc_3.CornerRadius = Theme.Sizes.SmallRadius
                 uc_3.Parent = button
 
+                local btnScale = Instance.new("UIScale", button)
+                
+                button.MouseButton1Down:Connect(function()
+                    TweenService:Create(btnScale, TweenInfo.new(0.1), {Scale = 0.96}):Play()
+                end)
+                button.MouseButton1Up:Connect(function()
+                    TweenService:Create(btnScale, TweenInfo.new(0.1), {Scale = 1}):Play()
+                end)
+
                 button.MouseEnter:Connect(function()
                     TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = Theme.Colors.Hover}):Play()
                 end)
 
                 button.MouseLeave:Connect(function()
                     TweenService:Create(button, TweenInfo.new(0.15), {BackgroundColor3 = Theme.Colors.ElementBack}):Play()
+                    TweenService:Create(btnScale, TweenInfo.new(0.1), {Scale = 1}):Play()
                 end)
 
                 if callback then
@@ -2174,6 +2223,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 ToggleCircle.Parent = ToggleIndicator
                 ToggleCircle.BackgroundColor3 = Theme.Colors.Text
                 ToggleCircle.Size = UDim2.new(0, 14, 0, 14)
+                local circScale = Instance.new("UIScale", ToggleCircle)
+
                 local circCorner = Instance.new("UICorner", ToggleCircle)
                 circCorner.CornerRadius = UDim.new(1,0)
 
@@ -2186,8 +2237,17 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                     local targetPos = toggled and onPos or offPos
 
-                    TweenService:Create(ToggleIndicator, TweenInfo.new(0.2), {BackgroundColor3 = targetColor}):Play()
-                    TweenService:Create(ToggleCircle, TweenInfo.new(0.2), {Position = targetPos}):Play()
+                    local mainTweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
+                    local scaleTweenInfo = TweenInfo.new(mainTweenInfo.Time / 2, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
+
+                    TweenService:Create(ToggleIndicator, mainTweenInfo, {BackgroundColor3 = targetColor}):Play()
+                    TweenService:Create(ToggleCircle, mainTweenInfo, {Position = targetPos}):Play()
+
+                    local scaleTween1 = TweenService:Create(circScale, scaleTweenInfo, {Scale = Vector2.new(1.2, 0.8)})
+                    scaleTween1.Completed:Connect(function()
+                        TweenService:Create(circScale, scaleTweenInfo, {Scale = Vector2.new(1, 1)}):Play()
+                    end)
+                    scaleTween1:Play()
                     if callback then
                         task.spawn(callback, toggled)
                     end
@@ -2475,8 +2535,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 scrollingList.Size = UDim2.new(1, 0, 1, -35)
                 scrollingList.AutomaticCanvasSize = Enum.AutomaticSize.Y
                 scrollingList.CanvasSize = UDim2.new(0, 0, 0, 0)
-                scrollingList.ScrollBarThickness = 8
-                scrollingList.ScrollBarImageTransparency = 0
+                scrollingList.ScrollBarThickness = 2
+                scrollingList.ScrollBarImageTransparency = 0.5
                 scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
                 scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
                 scrollingList.ZIndex = 35
@@ -2506,6 +2566,27 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
      
                         optionsFrame.Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 0)
                         optionsFrame.Visible = true
+
+                        for i, v in ipairs(scrollingList:GetChildren()) do
+                            if v:IsA("TextButton") then
+                                local textLabel = v:FindFirstChildWhichIsA("TextLabel")
+                                local checkmark = v:FindFirstChild("Checkmark")
+                                
+                                v.BackgroundTransparency = 1
+                                if textLabel then textLabel.TextTransparency = 1 end
+                                if checkmark then checkmark.BackgroundTransparency = 1 end
+                                
+                                task.delay(0.05 + (i * 0.02), function()
+                                    if optionsFrame.Visible then
+                                        local tweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+                                        TweenService:Create(v, tweenInfo, {BackgroundTransparency = 0}):Play()
+                                        if textLabel then TweenService:Create(textLabel, tweenInfo, {TextTransparency = 0}):Play() end
+                                        if checkmark then TweenService:Create(checkmark, tweenInfo, {BackgroundTransparency = 0}):Play() end
+                                    end
+                                end)
+                            end
+                        end
+
                         TweenService:Create(optionsFrame, TweenInfo.new(0.2), {Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 160)}):Play()
                         TweenService:Create(arrow, TweenInfo.new(0.2), {Rotation = 180}):Play()
     
@@ -2778,6 +2859,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             ToggleCircle.Parent = ToggleIndicator
             ToggleCircle.BackgroundColor3 = Theme.Colors.Text
             ToggleCircle.Size = UDim2.new(0, 14, 0, 14)
+            local circScale = Instance.new("UIScale", ToggleCircle)
+
             local circCorner = Instance.new("UICorner", ToggleCircle)
             circCorner.CornerRadius = UDim.new(1,0)
 
@@ -2791,8 +2874,18 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                 local targetPos = toggled and onPos or UDim2.new(0, 2, 0, 2)
 
-                TweenService:Create(ToggleIndicator, TweenInfo.new(0.2), {BackgroundColor3 = targetColor}):Play()
-                TweenService:Create(ToggleCircle, TweenInfo.new(0.2), {Position = targetPos}):Play()
+                local mainTweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
+                local scaleTweenInfo = TweenInfo.new(mainTweenInfo.Time / 2, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
+
+                TweenService:Create(ToggleIndicator, mainTweenInfo, {BackgroundColor3 = targetColor}):Play()
+                TweenService:Create(ToggleCircle, mainTweenInfo, {Position = targetPos}):Play()
+
+                local scaleTween1 = TweenService:Create(circScale, scaleTweenInfo, {Scale = Vector2.new(1.2, 0.8)})
+                scaleTween1.Completed:Connect(function()
+                    TweenService:Create(circScale, scaleTweenInfo, {Scale = Vector2.new(1, 1)}):Play()
+                end)
+                scaleTween1:Play()
+
                 if callback then
                     task.spawn(callback, toggled)
                 end
@@ -3122,6 +3215,27 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
  
                     optionsFrame.Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 0)
                     optionsFrame.Visible = true
+
+                    for i, v in ipairs(scrollingList:GetChildren()) do
+                        if v:IsA("TextButton") then
+                            local textLabel = v:FindFirstChildWhichIsA("TextLabel")
+                            local checkmark = v:FindFirstChild("Checkmark")
+                            
+                            v.BackgroundTransparency = 1
+                            if textLabel then textLabel.TextTransparency = 1 end
+                            if checkmark then checkmark.BackgroundTransparency = 1 end
+                            
+                            task.delay(0.05 + (i * 0.02), function()
+                                if optionsFrame.Visible then
+                                    local tweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
+                                    TweenService:Create(v, tweenInfo, {BackgroundTransparency = 0}):Play()
+                                    if textLabel then TweenService:Create(textLabel, tweenInfo, {TextTransparency = 0}):Play() end
+                                    if checkmark then TweenService:Create(checkmark, tweenInfo, {BackgroundTransparency = 0}):Play() end
+                                end
+                            end)
+                        end
+                    end
+
                     TweenService:Create(optionsFrame, TweenInfo.new(0.2), {Size = UDim2.new(0, dropdownButton.AbsoluteSize.X, 0, 160)}):Play()
                     TweenService:Create(arrow, TweenInfo.new(0.2), {Rotation = 180}):Play()
 
@@ -3264,6 +3378,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
 
         sidebar2.MouseButton1Click:Connect(function()
+            sectionIcon.Rotation = 0
+            sectionIconScale.Scale = 0.6
+            TweenService:Create(sectionIcon, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Rotation = 360}):Play()
+            TweenService:Create(sectionIconScale, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Scale = 1}):Play()
             sec:Select()
         end)
 
