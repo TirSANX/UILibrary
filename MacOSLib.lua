@@ -2243,9 +2243,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     TweenService:Create(ToggleIndicator, mainTweenInfo, {BackgroundColor3 = targetColor}):Play()
                     TweenService:Create(ToggleCircle, mainTweenInfo, {Position = targetPos}):Play()
 
-                    local scaleTween1 = TweenService:Create(circScale, scaleTweenInfo, {Scale = Vector2.new(1.2, 0.8)})
+                    local scaleTween1 = TweenService:Create(circScale, scaleTweenInfo, {Scale = 1.2})
                     scaleTween1.Completed:Connect(function()
-                        TweenService:Create(circScale, scaleTweenInfo, {Scale = Vector2.new(1, 1)}):Play()
+                        TweenService:Create(circScale, scaleTweenInfo, {Scale = 1}):Play()
                     end)
                     scaleTween1:Play()
                     if callback then
@@ -2880,9 +2880,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 TweenService:Create(ToggleIndicator, mainTweenInfo, {BackgroundColor3 = targetColor}):Play()
                 TweenService:Create(ToggleCircle, mainTweenInfo, {Position = targetPos}):Play()
 
-                local scaleTween1 = TweenService:Create(circScale, scaleTweenInfo, {Scale = Vector2.new(1.2, 0.8)})
+                local scaleTween1 = TweenService:Create(circScale, scaleTweenInfo, {Scale = 1.2})
                 scaleTween1.Completed:Connect(function()
-                    TweenService:Create(circScale, scaleTweenInfo, {Scale = Vector2.new(1, 1)}):Play()
+                    TweenService:Create(circScale, scaleTweenInfo, {Scale = 1}):Play()
                 end)
                 scaleTween1:Play()
 
