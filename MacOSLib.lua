@@ -777,7 +777,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     updateLoadingProgress("Creating main window...", 0.25)
     task.wait(1)
 
-    local main = Instance.new("Frame")
+    local main = Instance.new("CanvasGroup")
     main.Name = "main"
     main.Parent = scrgui
     main.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -806,12 +806,17 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     mainShadow.ScaleType = Enum.ScaleType.Slice
     mainShadow.SliceCenter = Rect.new(100, 100, 100, 100)
 
-    local mainFloatingBorder = Instance.new("Frame")
-    mainFloatingBorder.Name = "FloatingBorder"
-    mainFloatingBorder.Parent = main
-    mainFloatingBorder.BackgroundTransparency = 1
-    mainFloatingBorder.Size = UDim2.new(1, 0, 1, 0)
-    mainFloatingBorder.ZIndex = 198
+    local mainShadowCorner = Instance.new("UICorner")
+    mainShadowCorner.CornerRadius = Theme.Sizes.LargeRadius
+    mainShadowCorner.Parent = mainShadow
+
+    main:GetPropertyChangedSignal("Position"):Connect(function()
+        mainShadow.Position = main.Position
+    end)
+
+    main:GetPropertyChangedSignal("Size"):Connect(function()
+        mainShadow.Size = main.Size
+    end)
 
     local TopBar = Instance.new("Frame")
     TopBar.Name = "TopBar"
@@ -1268,7 +1273,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     uc_20.CornerRadius = Theme.Sizes.FullRadius
     uc_20.Parent = resize
     
-    local notif = Instance.new("Frame")
+    local notif = Instance.new("CanvasGroup")
     notif.Name = "notif"
     notif.Parent = main
     notif.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -1308,7 +1313,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     uc_12.CornerRadius = Theme.Sizes.SmallRadius
     uc_12.Parent = notifbutton1
 
-    notifdarkness = Instance.new("Frame")
+    notifdarkness = Instance.new("CanvasGroup")
     notifdarkness.Name = "notifdarkness"
     notifdarkness.Parent = main 
     notifdarkness.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -1361,7 +1366,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     notiftext.TextSize = 16
     notiftext.TextWrapped = true
 
-    local notif2 = Instance.new("Frame")
+    local notif2 = Instance.new("CanvasGroup")
     notif2.Name = "notif2"
     notif2.Parent = main
     notif2.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -1426,7 +1431,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     uc_15.CornerRadius = Theme.Sizes.SmallRadius
     uc_15.Parent = notif2button1
 
-    notif2darkness = Instance.new("Frame")
+    notif2darkness = Instance.new("CanvasGroup")
     notif2darkness.Name = "notif2darkness"
     notif2darkness.Parent = main 
     notif2darkness.AnchorPoint = Vector2.new(0.5, 0.5)
@@ -1659,6 +1664,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         tshadow.Image = "rbxassetid://313486536"
         tshadow.ImageColor3 = Theme.Colors.Shadow
         tshadow.ImageTransparency = 0.400
+
+        local tshadowCorner = Instance.new("UICorner")
+        tshadowCorner.CornerRadius = Theme.Sizes.LargeRadius
+        tshadowCorner.Parent = tshadow
         
         Debris:AddItem(tempnotif, 5)
     end
