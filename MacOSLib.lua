@@ -2263,11 +2263,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
 
                 ToggleFrame.MouseButton1Click:Connect(handleToggle)
-                ToggleFrame.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.Touch then
-                        handleToggle()
-                    end
-                end)
             end
 
             function section:TextField(text, placeholder, callback)
@@ -2738,11 +2733,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
 
                 dropdownButton.MouseButton1Click:Connect(handleDropdownToggle)
-                dropdownButton.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.Touch then
-                        handleDropdownToggle()
-                    end
-                end)
 
                 local api = {}
                 function api:Refresh(newList, keepSelection)
@@ -3404,11 +3394,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             end
 
             dropdownButton.MouseButton1Click:Connect(handleDropdownToggle)
-            dropdownButton.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.Touch then
-                    handleDropdownToggle()
-                end
-            end)
 
             local api = {}
             function api:Refresh(newList, keepSelection)
