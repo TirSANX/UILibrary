@@ -2497,7 +2497,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionsFrame.Visible = false
                 optionsFrame.ZIndex = 20
                 optionsFrame.ClipsDescendants = true
-                optionsFrame.Active = true
+                optionsFrame.Active = false
                 
                 local uc_options = Instance.new("UICorner", optionsFrame)
                 uc_options.CornerRadius = Theme.Sizes.SmallRadius
@@ -2509,6 +2509,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 searchContainer.Position = UDim2.new(0, 5, 0, 5)
                 searchContainer.Size = UDim2.new(1, -10, 0, 25)
                 searchContainer.ZIndex = 21
+                searchContainer.Active = false
                 local uc_search = Instance.new("UICorner", searchContainer)
                 uc_search.CornerRadius = Theme.Sizes.SmallRadius
 
@@ -2550,6 +2551,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
                 scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
                 scrollingList.ZIndex = 35
+                scrollingList.Active = true
 
                 local listLayout = Instance.new("UIListLayout", scrollingList)
                 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -3147,7 +3149,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             optionsFrame.Visible = false
             optionsFrame.ZIndex = 20
             optionsFrame.ClipsDescendants = true
-            optionsFrame.Active = true
+            optionsFrame.Active = false
             
 
             local uc_options = Instance.new("UICorner", optionsFrame)
@@ -3160,6 +3162,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             searchContainer.Position = UDim2.new(0, 5, 0, 5)
             searchContainer.Size = UDim2.new(1, -10, 0, 25)
             searchContainer.ZIndex = 21
+            searchContainer.Active = false
             local uc_search = Instance.new("UICorner", searchContainer)
             uc_search.CornerRadius = Theme.Sizes.SmallRadius
 
@@ -3201,6 +3204,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
             scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
             scrollingList.ZIndex = 35
+            scrollingList.Active = true
 
             local listLayout = Instance.new("UIListLayout", scrollingList)
             listLayout.SortOrder = Enum.SortOrder.LayoutOrder
