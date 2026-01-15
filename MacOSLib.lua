@@ -2169,6 +2169,16 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                         TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Theme.Colors.ElementBack}):Play()
                         task.spawn(callback)
                     end)
+                    
+                    -- Touch support for mobile
+                    button.InputBegan:Connect(function(input)
+                        if input.UserInputType == Enum.UserInputType.Touch then
+                            TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = Theme.Colors.Primary}):Play()
+                            task.wait(0.1)
+                            TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Theme.Colors.ElementBack}):Play()
+                            task.spawn(callback)
+                        end
+                    end)
                 end
             end
 
@@ -2259,6 +2269,30 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     scaleTween1:Play()
                     if callback then
                         task.spawn(callback, toggled)
+                    end
+                end)
+
+                -- Touch support for mobile
+                ToggleFrame.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.Touch then
+                        toggled = not toggled
+                        local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
+                        local targetPos = toggled and onPos or offPos
+
+                        local mainTweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
+                        local scaleTweenInfo = TweenInfo.new(mainTweenInfo.Time / 2, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
+
+                        TweenService:Create(ToggleIndicator, mainTweenInfo, {BackgroundColor3 = targetColor}):Play()
+                        TweenService:Create(ToggleCircle, mainTweenInfo, {Position = targetPos}):Play()
+
+                        local scaleTween1 = TweenService:Create(circScale, scaleTweenInfo, {Scale = 1.2})
+                        scaleTween1.Completed:Connect(function()
+                            TweenService:Create(circScale, scaleTweenInfo, {Scale = 1}):Play()
+                        end)
+                        scaleTween1:Play()
+                        if callback then
+                            task.spawn(callback, toggled)
+                        end
                     end
                 end)
             end
@@ -2694,6 +2728,35 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                         end
                     end)
                     
+                    -- Touch support for mobile
+                    optionButton.InputBegan:Connect(function(input)
+                        if input.UserInputType == Enum.UserInputType.Touch then
+                            if isMultiSelect then
+                                selectedItems[optionName] = not selectedItems[optionName]
+                                checkmark.Visible = selectedItems[optionName]
+        
+                                local result = {}
+                                for _, item in ipairs(newList) do
+                                    if selectedItems[item] then table.insert(result, item) end
+                                end
+        
+                                if #result > 0 then
+                                    dropdownButton.Text = table.concat(result, ", ")
+                                else
+                                    dropdownButton.Text = "Select"
+                                end
+        
+                                if callback then
+                                    callback(result)
+                                end
+                            else
+                                dropdownButton.Text = optionName
+                                toggleDropdown(false)
+                                if callback then callback(optionName) end
+                            end
+                        end
+                    end)
+                    
                     optionButton.MouseEnter:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.Hover end)
                     optionButton.MouseLeave:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.ElementBack end)
                 end
@@ -2719,6 +2782,18 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     for _, button in ipairs(scrollingList:GetChildren()) do
                         if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
                             button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
+                        end
+                    end
+                end)
+                
+                -- Touch support for mobile
+                dropdownButton.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.Touch then
+                        toggleDropdown(not optionsFrame.Visible)
+                        for _, button in ipairs(scrollingList:GetChildren()) do
+                            if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
+                                button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
+                            end
                         end
                     end
                 end)
