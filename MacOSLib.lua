@@ -2497,6 +2497,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionsFrame.Visible = false
                 optionsFrame.ZIndex = 20
                 optionsFrame.ClipsDescendants = true
+                optionsFrame.Active = true
                 
                 local uc_options = Instance.new("UICorner", optionsFrame)
                 uc_options.CornerRadius = Theme.Sizes.SmallRadius
@@ -2639,7 +2640,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     optionButton.Size = UDim2.new(1, 0, 0, 30)
                     optionButton.BorderSizePixel = 0
                     optionButton.Text = ""
-                    optionButton.ZIndex = 9
+                    optionButton.ZIndex = 25
+                    optionButton.Active = true
     
                     local checkmark = Instance.new("Frame", optionButton)
                     checkmark.Name = "Checkmark"
@@ -3145,6 +3147,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             optionsFrame.Visible = false
             optionsFrame.ZIndex = 20
             optionsFrame.ClipsDescendants = true
+            optionsFrame.Active = true
             
 
             local uc_options = Instance.new("UICorner", optionsFrame)
@@ -3293,6 +3296,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionButton.BorderSizePixel = 0
                 optionButton.Text = ""
                 optionButton.ZIndex = 36
+                optionButton.Active = true
 
                 local checkmark = Instance.new("Frame", optionButton)
                 checkmark.Name = "Checkmark"
