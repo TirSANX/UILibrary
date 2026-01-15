@@ -2268,6 +2268,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     if callback then
                         task.spawn(callback, toggled)
                     end
+                    end
                 end)
             end
 
