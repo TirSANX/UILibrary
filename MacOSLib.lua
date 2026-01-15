@@ -2262,7 +2262,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end
                 end
 
-                ToggleFrame.MouseButton1Click:Connect(handleToggle)
+                ToggleFrame.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                        handleToggle()
+                    end
+                end)
             end
 
             function section:TextField(text, placeholder, callback)
@@ -2351,6 +2355,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 track.Parent = sliderContainer
                 track.BackgroundColor3 = Theme.Colors.ElementBack
     
+                track.Active = true
                 track.Position = UDim2.new(0.5, 0, 0.6, 0)
                 track.AnchorPoint = Vector2.new(0, 0)
                 track.Size = UDim2.new(0.5, 0, 0, 6)
@@ -2401,7 +2406,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end
                 end
     
-                thumb.InputBegan:Connect(function(input)
+                local function onInput(input)
                     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                         local moveConn, releaseConn
                         moveConn = UserInputService.InputChanged:Connect(function(moveInput)
@@ -2416,7 +2421,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                             releaseConn:Disconnect()
                         end)
                     end
-                end)
+                end
+
+                thumb.InputBegan:Connect(onInput)
+                track.InputBegan:Connect(onInput)
     
                 updateSlider(currentValue, false)
             end
@@ -2670,7 +2678,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     
                     optionButton.AutoButtonColor = false
     
-                    local function handleSelect()
+                    optionButton.InputBegan:Connect(function(input)
+                        if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
+                        
                         if isMultiSelect then
                             selectedItems[optionName] = not selectedItems[optionName]
                             checkmark.Visible = selectedItems[optionName]
@@ -2693,13 +2703,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                             dropdownButton.Text = optionName
                             toggleDropdown(false)
                             if callback then callback(optionName) end
-                        end
-                    end
-    
-                    optionButton.MouseButton1Click:Connect(handleSelect)
-                    optionButton.InputBegan:Connect(function(input)
-                        if input.UserInputType == Enum.UserInputType.Touch then
-                            handleSelect()
                         end
                     end)
                     
@@ -2732,7 +2735,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end
                 end
 
-                dropdownButton.MouseButton1Click:Connect(handleDropdownToggle)
+                dropdownButton.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                        handleDropdownToggle()
+                    end
+                end)
 
                 local api = {}
                 function api:Refresh(newList, keepSelection)
@@ -2889,7 +2896,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             ToggleCircle.Position = toggled and onPos or UDim2.new(0, 2, 0, 2)
             ToggleCircle.AnchorPoint = Vector2.new(0, 0)
 
-            ToggleFrame.MouseButton1Click:Connect(function()
+            ToggleFrame.InputBegan:Connect(function(input)
+                if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
+                
                 toggled = not toggled
                 local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                 local targetPos = toggled and onPos or UDim2.new(0, 2, 0, 2)
@@ -3002,6 +3011,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             track.Parent = sliderContainer
             track.BackgroundColor3 = Theme.Colors.LightGray
             track.BackgroundColor3 = Theme.Colors.ElementBack
+            track.Active = true
 
             track.Position = UDim2.new(0.5, 0, 0.6, 0)
             track.AnchorPoint = Vector2.new(0, 0)
@@ -3054,7 +3064,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
             end
 
-            thumb.InputBegan:Connect(function(input)
+            local function onInput(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     local moveConn, releaseConn
                     moveConn = UserInputService.InputChanged:Connect(function(moveInput)
@@ -3069,7 +3079,10 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                         releaseConn:Disconnect()
                     end)
                 end
-            end)
+            end
+
+            thumb.InputBegan:Connect(onInput)
+            track.InputBegan:Connect(onInput)
 
             updateSlider(currentValue, false)
         end
@@ -3331,7 +3344,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 optionButton.AutoButtonColor = false
 
-                local function handleSelect()
+                optionButton.InputBegan:Connect(function(input)
+                    if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
+                    
                     if isMultiSelect then
                         selectedItems[optionName] = not selectedItems[optionName]
                         checkmark.Visible = selectedItems[optionName]
@@ -3354,13 +3369,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                         dropdownButton.Text = optionName
                         toggleDropdown(false)
                         if callback then callback(optionName) end
-                    end
-                end
-
-                optionButton.MouseButton1Click:Connect(handleSelect)
-                optionButton.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.Touch then
-                        handleSelect()
                     end
                 end)
                 
@@ -3393,7 +3401,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
             end
 
-            dropdownButton.MouseButton1Click:Connect(handleDropdownToggle)
+            dropdownButton.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    handleDropdownToggle()
+                end
+            end)
 
             local api = {}
             function api:Refresh(newList, keepSelection)
