@@ -667,6 +667,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
         scrgui = Instance.new("ScreenGui")
         scrgui.Name = "AegisLib"
+        scrgui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        scrgui.DisplayOrder = 100
         
         syn.protect_gui(scrgui)
         scrgui.Parent = CoreGui
@@ -680,6 +682,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
         scrgui = Instance.new("ScreenGui")
         scrgui.Name = "AegisLib"
+        scrgui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        scrgui.DisplayOrder = 100
         scrgui.Parent = hui
     else
         if CoreGui:FindFirstChild("AegisLib") and deleteprevious then
@@ -690,6 +694,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
         scrgui = Instance.new("ScreenGui")
         scrgui.Name = "AegisLib"
+        scrgui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+        scrgui.DisplayOrder = 100
         scrgui.Parent = CoreGui
     end
 
@@ -2241,7 +2247,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local onPos = UDim2.new(0, 20, 0, 2)
                 ToggleCircle.Position = toggled and onPos or offPos
 
-                local function handleToggle()
+                ToggleFrame.MouseButton1Click:Connect(function()
                     toggled = not toggled
                     local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                     local targetPos = toggled and onPos or offPos
@@ -2259,12 +2265,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     scaleTween1:Play()
                     if callback then
                         task.spawn(callback, toggled)
-                    end
-                end
-
-                ToggleFrame.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                        handleToggle()
                     end
                 end)
             end
@@ -2678,9 +2678,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     
                     optionButton.AutoButtonColor = false
     
-                    optionButton.InputBegan:Connect(function(input)
-                        if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
-                        
+                    optionButton.MouseButton1Click:Connect(function()
                         if isMultiSelect then
                             selectedItems[optionName] = not selectedItems[optionName]
                             checkmark.Visible = selectedItems[optionName]
@@ -2735,11 +2733,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end
                 end
 
-                dropdownButton.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                        handleDropdownToggle()
-                    end
-                end)
+                dropdownButton.MouseButton1Click:Connect(handleDropdownToggle)
 
                 local api = {}
                 function api:Refresh(newList, keepSelection)
@@ -2896,9 +2890,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             ToggleCircle.Position = toggled and onPos or UDim2.new(0, 2, 0, 2)
             ToggleCircle.AnchorPoint = Vector2.new(0, 0)
 
-            ToggleFrame.InputBegan:Connect(function(input)
-                if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
-                
+            ToggleFrame.MouseButton1Click:Connect(function()
                 toggled = not toggled
                 local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                 local targetPos = toggled and onPos or UDim2.new(0, 2, 0, 2)
@@ -3344,9 +3336,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 optionButton.AutoButtonColor = false
 
-                optionButton.InputBegan:Connect(function(input)
-                    if input.UserInputType ~= Enum.UserInputType.MouseButton1 and input.UserInputType ~= Enum.UserInputType.Touch then return end
-                    
+                optionButton.MouseButton1Click:Connect(function()
                     if isMultiSelect then
                         selectedItems[optionName] = not selectedItems[optionName]
                         checkmark.Visible = selectedItems[optionName]
@@ -3401,11 +3391,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
             end
 
-            dropdownButton.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    handleDropdownToggle()
-                end
-            end)
+            dropdownButton.MouseButton1Click:Connect(handleDropdownToggle)
 
             local api = {}
             function api:Refresh(newList, keepSelection)
