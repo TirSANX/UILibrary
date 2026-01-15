@@ -878,7 +878,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     SettingsBtn.ZIndex = 17
     
     local settingsClickCallback
-    SettingsBtn.MouseButton1Click:Connect(function()
+    SettingsBtn.Activated:Connect(function()
         if settingsClickCallback then
             settingsClickCallback()
         end
@@ -959,7 +959,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
     end)
 
-    hiddenIndicator.MouseButton1Click:Connect(function()
+    hiddenIndicator.Activated:Connect(function()
         hiLogo.Rotation = 0
         hiLogoScale.Scale = 0.6
         TweenService:Create(hiLogo, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Rotation = 360}):Play()
@@ -998,7 +998,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     miLogo.Image = "rbxassetid://101129417614969"
     local miLogoScale = Instance.new("UIScale", miLogo)
 
-    mobileIndicator.MouseButton1Click:Connect(function()
+    mobileIndicator.Activated:Connect(function()
         if not visible then
             miLogo.Rotation = 0
             miLogoScale.Scale = 0.6
@@ -1085,7 +1085,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     searchtextbox.TextSize = 18
     searchtextbox.TextXAlignment = Enum.TextXAlignment.Left
 
-    searchicon.MouseButton1Click:Connect(function()
+    searchicon.Activated:Connect(function()
         searchtextbox:CaptureFocus()
     end)
 
@@ -1198,7 +1198,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     closeIcon.AnchorPoint = Vector2.new(0.5, 0.5)
     closeIcon.Image = Theme.Icons["x"]
     closeIcon.ImageTransparency = 1
-    close.MouseButton1Click:Connect(function()
+    close.Activated:Connect(function()
         window:Notify2(
             "CONFIRM CLOSE!",
             "Are you sure you want to destroy the UI?",
@@ -1232,7 +1232,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     minimizeIcon.Image = Theme.Icons["minus"]
     minimizeIcon.ImageTransparency = 1
 
-    minimize.MouseButton1Click:Connect(function()
+    minimize.Activated:Connect(function()
         if UserInputService.TouchEnabled then
             window:ToggleVisible()
         end
@@ -1536,7 +1536,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     end
 
     if visiblekey then
-        minimize.MouseButton1Click:Connect(function()
+        minimize.Activated:Connect(function()
             if not UserInputService.TouchEnabled then
                 window:ToggleVisible()
             end
@@ -1553,7 +1553,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             window.greenButtonConnection:Disconnect() 
         end
         
-        window.greenButtonConnection = resize.MouseButton1Click:Connect(function()
+        window.greenButtonConnection = resize.Activated:Connect(function()
             isMaximized = not isMaximized
             local tweenTime = 0.3
             local tween
@@ -2074,7 +2074,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
             -- Toggle Logic
             local tweening = false
-            SectionHeader.MouseButton1Click:Connect(function()
+            SectionHeader.Activated:Connect(function()
                 if tweening then return end
                 tweening = true
 
@@ -2163,7 +2163,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end)
 
                 if callback then
-                    button.MouseButton1Click:Connect(function()
+                    button.Activated:Connect(function()
                         TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = Theme.Colors.Primary}):Play()
                         task.wait(0.1)
                         TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Theme.Colors.ElementBack}):Play()
@@ -2241,7 +2241,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local onPos = UDim2.new(0, 20, 0, 2)
                 ToggleCircle.Position = toggled and onPos or offPos
 
-                ToggleFrame.MouseButton1Click:Connect(function()
+            ToggleFrame.Activated:Connect(function()
                     toggled = not toggled
                     local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                     local targetPos = toggled and onPos or offPos
@@ -2799,7 +2799,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             end)
 
             if callback then
-                button.MouseButton1Click:Connect(function()
+                button.Activated:Connect(function()
                     TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = Theme.Colors.Primary}):Play()
                     task.wait(0.1)
                     TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Theme.Colors.ElementBack}):Play()
@@ -2878,7 +2878,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             ToggleCircle.Position = toggled and onPos or UDim2.new(0, 2, 0, 2)
             ToggleCircle.AnchorPoint = Vector2.new(0, 0)
 
-            ToggleFrame.MouseButton1Click:Connect(function()
+            ToggleFrame.Activated:Connect(function()
                 toggled = not toggled
                 local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                 local targetPos = toggled and onPos or UDim2.new(0, 2, 0, 2)
@@ -3207,7 +3207,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 if isOpen then
                     local main = dropdown:FindFirstAncestor("main")
                     outsideClickListener = UserInputService.InputBegan:Connect(function(input)
-                        if input.UserInputType == Enum.UserInputType.MouseButton1 and optionsFrame.Visible then
+                            if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) and optionsFrame.Visible then
                             local mousePos = input.Position
                             local inOptions = (mousePos.X >= optionsFrame.AbsolutePosition.X and mousePos.X <= optionsFrame.AbsolutePosition.X + optionsFrame.AbsoluteSize.X and mousePos.Y >= optionsFrame.AbsolutePosition.Y and mousePos.Y <= optionsFrame.AbsolutePosition.Y + optionsFrame.AbsoluteSize.Y)
                             local inButton = (mousePos.X >= dropdownButton.AbsolutePosition.X and mousePos.X <= dropdownButton.AbsolutePosition.X + dropdownButton.AbsoluteSize.X and mousePos.Y >= dropdownButton.AbsolutePosition.Y and mousePos.Y <= dropdownButton.AbsolutePosition.Y + dropdownButton.AbsoluteSize.Y)
@@ -3320,7 +3320,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 optionButton.AutoButtonColor = false
 
-                optionButton.MouseButton1Click:Connect(function()
+                optionButton.Activated:Connect(function()
                     if isMultiSelect then
                         selectedItems[optionName] = not selectedItems[optionName]
                         checkmark.Visible = selectedItems[optionName]
@@ -3366,7 +3366,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
             UpdateOptions(list)
 
-            dropdownButton.MouseButton1Click:Connect(function()
+            dropdownButton.Activated:Connect(function()
                 toggleDropdown(not optionsFrame.Visible)
                 for _, button in ipairs(scrollingList:GetChildren()) do
                     if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
@@ -3386,7 +3386,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             return api
         end
 
-        sidebar2.MouseButton1Click:Connect(function()
+        sidebar2.Activated:Connect(function()
             sectionIcon.Rotation = 0
             sectionIconScale.Scale = 0.6
             TweenService:Create(sectionIcon, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Rotation = 360}):Play()
