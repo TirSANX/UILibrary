@@ -2549,6 +2549,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
                 scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
                 scrollingList.ZIndex = 35
+                scrollingList.Active = false
 
                 local listLayout = Instance.new("UIListLayout", scrollingList)
                 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -3198,6 +3199,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
             scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
             scrollingList.ZIndex = 35
+            scrollingList.Active = false
 
             local listLayout = Instance.new("UIListLayout", scrollingList)
             listLayout.SortOrder = Enum.SortOrder.LayoutOrder
