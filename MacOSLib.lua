@@ -2497,6 +2497,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionsFrame.Visible = false
                 optionsFrame.ZIndex = 20
                 optionsFrame.ClipsDescendants = true
+                optionsFrame.Active = true
                 
                 local uc_options = Instance.new("UICorner", optionsFrame)
                 uc_options.CornerRadius = Theme.Sizes.SmallRadius
@@ -2508,6 +2509,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 searchContainer.Position = UDim2.new(0, 5, 0, 5)
                 searchContainer.Size = UDim2.new(1, -10, 0, 25)
                 searchContainer.ZIndex = 21
+                searchContainer.Active = true
                 local uc_search = Instance.new("UICorner", searchContainer)
                 uc_search.CornerRadius = Theme.Sizes.SmallRadius
 
@@ -3146,6 +3148,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             optionsFrame.Visible = false
             optionsFrame.ZIndex = 20
             optionsFrame.ClipsDescendants = true
+            optionsFrame.Active = true
             
 
             local uc_options = Instance.new("UICorner", optionsFrame)
@@ -3158,6 +3161,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             searchContainer.Position = UDim2.new(0, 5, 0, 5)
             searchContainer.Size = UDim2.new(1, -10, 0, 25)
             searchContainer.ZIndex = 21
+            searchContainer.Active = true
             local uc_search = Instance.new("UICorner", searchContainer)
             uc_search.CornerRadius = Theme.Sizes.SmallRadius
 
