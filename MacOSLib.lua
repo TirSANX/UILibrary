@@ -2490,6 +2490,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionsFrame.Name = "OptionsFrame"
                 optionsFrame.Parent = dropdown
                 optionsFrame.BackgroundColor3 = Theme.Colors.SectionBack
+                optionsFrame.BackgroundTransparency = 1
                 optionsFrame.BorderSizePixel = 0
                 optionsFrame.Position = UDim2.new(0.5, 0, 1, 5) 
                 optionsFrame.AnchorPoint = Vector2.new(0, 0)
@@ -3141,6 +3142,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             optionsFrame.Name = "OptionsFrame"
             optionsFrame.Parent = dropdown
             optionsFrame.BackgroundColor3 = Theme.Colors.SectionBack
+            optionsFrame.BackgroundTransparency = 1
             optionsFrame.BorderSizePixel = 0
 
             optionsFrame.Position = UDim2.new(0.5, 0, 1, 5) 
