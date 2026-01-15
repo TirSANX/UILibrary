@@ -2125,8 +2125,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end)
                     tween:Play()
                 end
-                end)
-            end
+                end
+            end)
 
             function section:Button(text, callback)
                 sectionLayoutOrderCounter = sectionLayoutOrderCounter + 1
@@ -2249,12 +2249,12 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 ToggleCircle.Position = toggled and onPos or offPos
 
             ToggleFrame.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                        toggled = not toggled
-                        local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
-                        local targetPos = toggled and onPos or offPos
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    toggled = not toggled
+                    local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
+                    local targetPos = toggled and onPos or offPos
 
-                        local mainTweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
+                    local mainTweenInfo = TweenInfo.new(0.25, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
                     local scaleTweenInfo = TweenInfo.new(mainTweenInfo.Time / 2, Enum.EasingStyle.Cubic, Enum.EasingDirection.Out)
 
                     TweenService:Create(ToggleIndicator, mainTweenInfo, {BackgroundColor3 = targetColor}):Play()
@@ -2268,9 +2268,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     if callback then
                         task.spawn(callback, toggled)
                     end
-                    end
-                end)
-            end
+                end
+            end)
 
             function section:TextField(text, placeholder, callback)
                 sectionLayoutOrderCounter = sectionLayoutOrderCounter + 1
