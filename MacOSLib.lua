@@ -878,7 +878,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     SettingsBtn.ZIndex = 17
     
     local settingsClickCallback
-    SettingsBtn.Activated:Connect(function()
+    SettingsBtn.MouseButton1Click:Connect(function()
         if settingsClickCallback then
             settingsClickCallback()
         end
@@ -959,7 +959,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
     end)
 
-    hiddenIndicator.Activated:Connect(function()
+    hiddenIndicator.MouseButton1Click:Connect(function()
         hiLogo.Rotation = 0
         hiLogoScale.Scale = 0.6
         TweenService:Create(hiLogo, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Rotation = 360}):Play()
@@ -998,7 +998,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     miLogo.Image = "rbxassetid://101129417614969"
     local miLogoScale = Instance.new("UIScale", miLogo)
 
-    mobileIndicator.Activated:Connect(function()
+    mobileIndicator.MouseButton1Click:Connect(function()
         if not visible then
             miLogo.Rotation = 0
             miLogoScale.Scale = 0.6
@@ -1085,7 +1085,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     searchtextbox.TextSize = 18
     searchtextbox.TextXAlignment = Enum.TextXAlignment.Left
 
-    searchicon.Activated:Connect(function()
+    searchicon.MouseButton1Click:Connect(function()
         searchtextbox:CaptureFocus()
     end)
 
@@ -1198,7 +1198,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     closeIcon.AnchorPoint = Vector2.new(0.5, 0.5)
     closeIcon.Image = Theme.Icons["x"]
     closeIcon.ImageTransparency = 1
-    close.Activated:Connect(function()
+    close.MouseButton1Click:Connect(function()
         window:Notify2(
             "CONFIRM CLOSE!",
             "Are you sure you want to destroy the UI?",
@@ -1232,7 +1232,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     minimizeIcon.Image = Theme.Icons["minus"]
     minimizeIcon.ImageTransparency = 1
 
-    minimize.Activated:Connect(function()
+    minimize.MouseButton1Click:Connect(function()
         if UserInputService.TouchEnabled then
             window:ToggleVisible()
         end
@@ -1536,7 +1536,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     end
 
     if visiblekey then
-        minimize.Activated:Connect(function()
+        minimize.MouseButton1Click:Connect(function()
             if not UserInputService.TouchEnabled then
                 window:ToggleVisible()
             end
@@ -1553,7 +1553,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             window.greenButtonConnection:Disconnect() 
         end
         
-        window.greenButtonConnection = resize.Activated:Connect(function()
+        window.greenButtonConnection = resize.MouseButton1Click:Connect(function()
             isMaximized = not isMaximized
             local tweenTime = 0.3
             local tween
