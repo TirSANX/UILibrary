@@ -2029,6 +2029,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             SectionHeader.BackgroundTransparency = 0  -- CHANGED: Make background visible
             SectionHeader.Size = UDim2.new(1, 0, 0, 40)  -- CHANGED: Increased from 35 to 40
             SectionHeader.AutoButtonColor = false
+            SectionHeader.Active = true
             SectionHeader.Font = Theme.Fonts.Title
             SectionHeader.Text = "  " .. sectionName
             SectionHeader.TextColor3 = Theme.Colors.Text
@@ -2074,7 +2075,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
             -- Toggle Logic
             local tweening = false
-            SectionHeader.Activated:Connect(function()
+            SectionHeader.MouseButton1Click:Connect(function()
                 if tweening then return end
                 tweening = true
 
@@ -2138,6 +2139,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 button.TextColor3 = Theme.Colors.Text
                 button.TextSize = 14
                 button.AutoButtonColor = false
+                button.Active = true
                 button.LayoutOrder = sectionLayoutOrderCounter
 
                 local uc_3 = Instance.new("UICorner")
@@ -2163,7 +2165,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end)
 
                 if callback then
-                    button.Activated:Connect(function()
+                    button.MouseButton1Click:Connect(function()
                         TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = Theme.Colors.Primary}):Play()
                         task.wait(0.1)
                         TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Theme.Colors.ElementBack}):Play()
@@ -2455,6 +2457,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 dropdownButton.AnchorPoint = Vector2.new(0, 0.5)
                 dropdownButton.Size = UDim2.new(0.5, 0, 1, -6)
                 dropdownButton.Font = Theme.Fonts.Body
+                dropdownButton.AutoButtonColor = false
+                dropdownButton.Active = true
                 dropdownButton.Text = (isMultiSelect and "Select") or (defaultValue or list[1] or "Select")
 
                 -- Initialize selectedItems from defaultValue for multi-select
@@ -3103,13 +3107,13 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             local dropdownButton = Instance.new("TextButton")
             dropdownButton.Name = "DropdownButton"
             dropdownButton.Parent = dropdown
-            dropdownButton.BackgroundColor3 = Theme.Colors.LightGray
-            dropdownButton.Parent = dropdown            
             dropdownButton.BackgroundColor3 = Theme.Colors.ElementBack
             dropdownButton.Position = UDim2.new(0.5, 0, 0.5, 0)
             dropdownButton.AnchorPoint = Vector2.new(0, 0.5)
             dropdownButton.Size = UDim2.new(0.5, 0, 1, -6)
             dropdownButton.Font = Theme.Fonts.Body
+            dropdownButton.AutoButtonColor = false
+            dropdownButton.Active = true
             dropdownButton.Text = (isMultiSelect and "Select") or (defaultValue or list[1] or "Select")
             if isMultiSelect and type(defaultValue) == "table" and #defaultValue > 0 then
                 dropdownButton.Text = table.concat(defaultValue, ", ")
