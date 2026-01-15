@@ -2409,14 +2409,22 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local function onInput(input)
                     if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                         local moveConn, releaseConn
+                        
                         moveConn = UserInputService.InputChanged:Connect(function(moveInput)
+                            if input.UserInputType == Enum.UserInputType.MouseButton1 and moveInput.UserInputType ~= Enum.UserInputType.MouseMovement then return end
+                            if input.UserInputType == Enum.UserInputType.Touch and moveInput ~= input then return end
+                            
                             local v_min = min or 0
                             local v_max = max or 100
                             local percentage = (moveInput.Position.X - track.AbsolutePosition.X) / track.AbsoluteSize.X
                             local newValue = v_min + (v_max - v_min) * math.clamp(percentage, 0, 1)
                             updateSlider(newValue, true)
                         end)
-                        releaseConn = UserInputService.InputEnded:Connect(function()
+                        
+                        releaseConn = UserInputService.InputEnded:Connect(function(endInput)
+                            if input.UserInputType == Enum.UserInputType.MouseButton1 and endInput.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+                            if input.UserInputType == Enum.UserInputType.Touch and endInput ~= input then return end
+                            
                             moveConn:Disconnect()
                             releaseConn:Disconnect()
                         end)
@@ -2492,8 +2500,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 arrow.BackgroundTransparency = 1
                 arrow.AnchorPoint = Vector2.new(0.5, 0.5)
                 arrow.Position = UDim2.new(1, -15, 0.5, 0)
-                arrow.Size = UDim2.new(0, 12, 0, 12)
-                arrow.Image = "rbxassetid://3926305904"
+                arrow.Size = UDim2.new(0, 16, 0, 16)
+                arrow.Image = Theme.Icons["chevron-down"]
                 arrow.ImageColor3 = Theme.Colors.Text
     
                 local optionsFrame = Instance.new("Frame")
@@ -2528,7 +2536,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 searchIcon.Size = UDim2.new(0, 14, 0, 14)
                 searchIcon.Position = UDim2.new(0, 6, 0.5, 0)
                 searchIcon.AnchorPoint = Vector2.new(0, 0.5)
-                searchIcon.Image = "rbxassetid://5036466001"
+                searchIcon.Image = Theme.Icons["search"]
                 searchIcon.ImageColor3 = Theme.Colors.Text
                 searchIcon.ZIndex = 22
 
@@ -3059,14 +3067,22 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             local function onInput(input)
                 if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
                     local moveConn, releaseConn
+                    
                     moveConn = UserInputService.InputChanged:Connect(function(moveInput)
+                        if input.UserInputType == Enum.UserInputType.MouseButton1 and moveInput.UserInputType ~= Enum.UserInputType.MouseMovement then return end
+                        if input.UserInputType == Enum.UserInputType.Touch and moveInput ~= input then return end
+                        
                         local v_min = min or 0
                         local v_max = max or 100
                         local percentage = (moveInput.Position.X - track.AbsolutePosition.X) / track.AbsoluteSize.X
                         local newValue = v_min + (v_max - v_min) * math.clamp(percentage, 0, 1)
                         updateSlider(newValue, true)
                     end)
-                    releaseConn = UserInputService.InputEnded:Connect(function()
+                    
+                    releaseConn = UserInputService.InputEnded:Connect(function(endInput)
+                        if input.UserInputType == Enum.UserInputType.MouseButton1 and endInput.UserInputType ~= Enum.UserInputType.MouseButton1 then return end
+                        if input.UserInputType == Enum.UserInputType.Touch and endInput ~= input then return end
+                        
                         moveConn:Disconnect()
                         releaseConn:Disconnect()
                     end)
