@@ -2198,6 +2198,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 ToggleFrame.BackgroundColor3 = Theme.Colors.ElementBack
                 ToggleFrame.Size = UDim2.new(1, 0, 0, 32)
                 ToggleFrame.AutoButtonColor = false
+                ToggleFrame.Active = true
                 ToggleFrame.Text = ""
                 ToggleFrame.LayoutOrder = sectionLayoutOrderCounter
                 local corner = Instance.new("UICorner", ToggleFrame)
@@ -2374,6 +2375,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 thumb.Position = UDim2.new(0, 0, 0.5, 0)
                 thumb.ZIndex = 3
                 thumb.Text = ""
+                thumb.Active = true
                 local thumbCorner = Instance.new("UICorner", thumb)
                 thumbCorner.CornerRadius = Theme.Sizes.FullRadius
                 local thumbStroke = Instance.new("UIStroke", thumb)
