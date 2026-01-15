@@ -878,7 +878,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     SettingsBtn.ZIndex = 17
     
     local settingsClickCallback
-    SettingsBtn.MouseButton1Click:Connect(function()
+    SettingsBtn.Activated:Connect(function()
         if settingsClickCallback then
             settingsClickCallback()
         end
@@ -959,7 +959,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
     end)
 
-    hiddenIndicator.MouseButton1Click:Connect(function()
+    hiddenIndicator.Activated:Connect(function()
         hiLogo.Rotation = 0
         hiLogoScale.Scale = 0.6
         TweenService:Create(hiLogo, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Rotation = 360}):Play()
@@ -998,7 +998,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     miLogo.Image = "rbxassetid://101129417614969"
     local miLogoScale = Instance.new("UIScale", miLogo)
 
-    mobileIndicator.MouseButton1Click:Connect(function()
+    mobileIndicator.Activated:Connect(function()
         if not visible then
             miLogo.Rotation = 0
             miLogoScale.Scale = 0.6
@@ -1085,7 +1085,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     searchtextbox.TextSize = 18
     searchtextbox.TextXAlignment = Enum.TextXAlignment.Left
 
-    searchicon.MouseButton1Click:Connect(function()
+    searchicon.Activated:Connect(function()
         searchtextbox:CaptureFocus()
     end)
 
@@ -1198,7 +1198,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     closeIcon.AnchorPoint = Vector2.new(0.5, 0.5)
     closeIcon.Image = Theme.Icons["x"]
     closeIcon.ImageTransparency = 1
-    close.MouseButton1Click:Connect(function()
+    close.Activated:Connect(function()
         window:Notify2(
             "CONFIRM CLOSE!",
             "Are you sure you want to destroy the UI?",
@@ -1232,7 +1232,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     minimizeIcon.Image = Theme.Icons["minus"]
     minimizeIcon.ImageTransparency = 1
 
-    minimize.MouseButton1Click:Connect(function()
+    minimize.Activated:Connect(function()
         if UserInputService.TouchEnabled then
             window:ToggleVisible()
         end
@@ -1536,7 +1536,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     end
 
     if visiblekey then
-        minimize.MouseButton1Click:Connect(function()
+        minimize.Activated:Connect(function()
             if not UserInputService.TouchEnabled then
                 window:ToggleVisible()
             end
@@ -1553,7 +1553,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             window.greenButtonConnection:Disconnect() 
         end
         
-        window.greenButtonConnection = resize.MouseButton1Click:Connect(function()
+        window.greenButtonConnection = resize.Activated:Connect(function()
             isMaximized = not isMaximized
             local tweenTime = 0.3
             local tween
@@ -2241,7 +2241,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local onPos = UDim2.new(0, 20, 0, 2)
                 ToggleCircle.Position = toggled and onPos or offPos
 
-            ToggleFrame.MouseButton1Click:Connect(function()
+            ToggleFrame.Activated:Connect(function()
                     toggled = not toggled
                     local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                     local targetPos = toggled and onPos or offPos
@@ -2490,7 +2490,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionsFrame.Name = "OptionsFrame"
                 optionsFrame.Parent = dropdown
                 optionsFrame.BackgroundColor3 = Theme.Colors.SectionBack
-                optionsFrame.BackgroundTransparency = 1
                 optionsFrame.BorderSizePixel = 0
                 optionsFrame.Position = UDim2.new(0.5, 0, 1, 5) 
                 optionsFrame.AnchorPoint = Vector2.new(0, 0)
@@ -2498,7 +2497,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionsFrame.Visible = false
                 optionsFrame.ZIndex = 20
                 optionsFrame.ClipsDescendants = true
-                optionsFrame.Active = false
                 
                 local uc_options = Instance.new("UICorner", optionsFrame)
                 uc_options.CornerRadius = Theme.Sizes.SmallRadius
@@ -2510,7 +2508,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 searchContainer.Position = UDim2.new(0, 5, 0, 5)
                 searchContainer.Size = UDim2.new(1, -10, 0, 25)
                 searchContainer.ZIndex = 21
-                searchContainer.Active = false
                 local uc_search = Instance.new("UICorner", searchContainer)
                 uc_search.CornerRadius = Theme.Sizes.SmallRadius
 
@@ -2552,7 +2549,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
                 scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
                 scrollingList.ZIndex = 35
-                scrollingList.Active = true
 
                 local listLayout = Instance.new("UIListLayout", scrollingList)
                 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -2643,8 +2639,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     optionButton.Size = UDim2.new(1, 0, 0, 30)
                     optionButton.BorderSizePixel = 0
                     optionButton.Text = ""
-                    optionButton.ZIndex = 25
-                    optionButton.Active = true
+                    optionButton.ZIndex = 9
     
                     local checkmark = Instance.new("Frame", optionButton)
                     checkmark.Name = "Checkmark"
@@ -2673,7 +2668,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     
                     optionButton.AutoButtonColor = false
     
-                    optionButton.MouseButton1Click:Connect(function()
+                    optionButton.Activated:Connect(function()
                         if isMultiSelect then
                             selectedItems[optionName] = not selectedItems[optionName]
                             checkmark.Visible = selectedItems[optionName]
@@ -2719,7 +2714,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 UpdateOptions(list)
     
-            dropdownButton.MouseButton1Click:Connect(function()
+            dropdownButton.Activated:Connect(function()
                     toggleDropdown(not optionsFrame.Visible)
                     for _, button in ipairs(scrollingList:GetChildren()) do
                         if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
@@ -3142,7 +3137,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             optionsFrame.Name = "OptionsFrame"
             optionsFrame.Parent = dropdown
             optionsFrame.BackgroundColor3 = Theme.Colors.SectionBack
-            optionsFrame.BackgroundTransparency = 1
             optionsFrame.BorderSizePixel = 0
 
             optionsFrame.Position = UDim2.new(0.5, 0, 1, 5) 
@@ -3151,7 +3145,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             optionsFrame.Visible = false
             optionsFrame.ZIndex = 20
             optionsFrame.ClipsDescendants = true
-            optionsFrame.Active = false
             
 
             local uc_options = Instance.new("UICorner", optionsFrame)
@@ -3164,7 +3157,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             searchContainer.Position = UDim2.new(0, 5, 0, 5)
             searchContainer.Size = UDim2.new(1, -10, 0, 25)
             searchContainer.ZIndex = 21
-            searchContainer.Active = false
             local uc_search = Instance.new("UICorner", searchContainer)
             uc_search.CornerRadius = Theme.Sizes.SmallRadius
 
@@ -3206,7 +3198,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
             scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
             scrollingList.ZIndex = 35
-            scrollingList.Active = true
 
             local listLayout = Instance.new("UIListLayout", scrollingList)
             listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -3302,7 +3293,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionButton.BorderSizePixel = 0
                 optionButton.Text = ""
                 optionButton.ZIndex = 36
-                optionButton.Active = true
 
                 local checkmark = Instance.new("Frame", optionButton)
                 checkmark.Name = "Checkmark"
@@ -3330,7 +3320,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 optionButton.AutoButtonColor = false
 
-                optionButton.MouseButton1Click:Connect(function()
+                optionButton.Activated:Connect(function()
                     if isMultiSelect then
                         selectedItems[optionName] = not selectedItems[optionName]
                         checkmark.Visible = selectedItems[optionName]
