@@ -2241,7 +2241,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local onPos = UDim2.new(0, 20, 0, 2)
                 ToggleCircle.Position = toggled and onPos or offPos
 
-            ToggleFrame.Activated:Connect(function()
+            ToggleFrame.MouseButton1Click:Connect(function()
                     toggled = not toggled
                     local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                     local targetPos = toggled and onPos or offPos
@@ -2668,7 +2668,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     
                     optionButton.AutoButtonColor = false
     
-                    optionButton.Activated:Connect(function()
+                    optionButton.MouseButton1Click:Connect(function()
                         if isMultiSelect then
                             selectedItems[optionName] = not selectedItems[optionName]
                             checkmark.Visible = selectedItems[optionName]
@@ -2714,7 +2714,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 UpdateOptions(list)
     
-            dropdownButton.Activated:Connect(function()
+            dropdownButton.MouseButton1Click:Connect(function()
                     toggleDropdown(not optionsFrame.Visible)
                     for _, button in ipairs(scrollingList:GetChildren()) do
                         if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
@@ -3320,7 +3320,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 optionButton.AutoButtonColor = false
 
-                optionButton.Activated:Connect(function()
+                optionButton.MouseButton1Click:Connect(function()
                     if isMultiSelect then
                         selectedItems[optionName] = not selectedItems[optionName]
                         checkmark.Visible = selectedItems[optionName]
