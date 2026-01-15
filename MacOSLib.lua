@@ -2241,7 +2241,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local onPos = UDim2.new(0, 20, 0, 2)
                 ToggleCircle.Position = toggled and onPos or offPos
 
-                ToggleFrame.MouseButton1Click:Connect(function()
+                local function handleToggle()
                     toggled = not toggled
                     local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                     local targetPos = toggled and onPos or offPos
@@ -2259,6 +2259,13 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     scaleTween1:Play()
                     if callback then
                         task.spawn(callback, toggled)
+                    end
+                end
+
+                ToggleFrame.MouseButton1Click:Connect(handleToggle)
+                ToggleFrame.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.Touch then
+                        handleToggle()
                     end
                 end)
             end
@@ -2695,6 +2702,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end
     
                     optionButton.MouseButton1Click:Connect(handleSelect)
+                    optionButton.InputBegan:Connect(function(input)
+                        if input.UserInputType == Enum.UserInputType.Touch then
+                            handleSelect()
+                        end
+                    end)
                     
                     optionButton.MouseEnter:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.Hover end)
                     optionButton.MouseLeave:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.ElementBack end)
@@ -2716,12 +2728,19 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 UpdateOptions(list)
     
-                dropdownButton.MouseButton1Click:Connect(function()
+                local function handleDropdownToggle()
                     toggleDropdown(not optionsFrame.Visible)
                     for _, button in ipairs(scrollingList:GetChildren()) do
                         if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
                             button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
                         end
+                    end
+                end
+
+                dropdownButton.MouseButton1Click:Connect(handleDropdownToggle)
+                dropdownButton.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.Touch then
+                        handleDropdownToggle()
                     end
                 end)
 
@@ -3349,6 +3368,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end
 
                 optionButton.MouseButton1Click:Connect(handleSelect)
+                optionButton.InputBegan:Connect(function(input)
+                    if input.UserInputType == Enum.UserInputType.Touch then
+                        handleSelect()
+                    end
+                end)
                 
                 optionButton.MouseEnter:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.Hover end)
                 optionButton.MouseLeave:Connect(function() optionButton.BackgroundColor3 = Theme.Colors.ElementBack end)
@@ -3370,12 +3394,19 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
             UpdateOptions(list)
 
-            dropdownButton.MouseButton1Click:Connect(function()
+            local function handleDropdownToggle()
                 toggleDropdown(not optionsFrame.Visible)
                 for _, button in ipairs(scrollingList:GetChildren()) do
                     if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
                         button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
                     end
+                end
+            end
+
+            dropdownButton.MouseButton1Click:Connect(handleDropdownToggle)
+            dropdownButton.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.Touch then
+                    handleDropdownToggle()
                 end
             end)
 
