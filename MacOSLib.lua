@@ -2125,7 +2125,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end)
                     tween:Play()
                 end
-            end)
+                end)
+            end
 
             function section:Button(text, callback)
                 sectionLayoutOrderCounter = sectionLayoutOrderCounter + 1
