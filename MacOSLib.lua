@@ -878,7 +878,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     SettingsBtn.ZIndex = 17
     
     local settingsClickCallback
-    SettingsBtn.MouseButton1Click:Connect(function()
+    SettingsBtn.Activated:Connect(function()
         if settingsClickCallback then
             settingsClickCallback()
         end
@@ -959,7 +959,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
         end
     end)
 
-    hiddenIndicator.MouseButton1Click:Connect(function()
+    hiddenIndicator.Activated:Connect(function()
         hiLogo.Rotation = 0
         hiLogoScale.Scale = 0.6
         TweenService:Create(hiLogo, TweenInfo.new(1.2, Enum.EasingStyle.Elastic, Enum.EasingDirection.Out), {Rotation = 360}):Play()
@@ -998,7 +998,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     miLogo.Image = "rbxassetid://101129417614969"
     local miLogoScale = Instance.new("UIScale", miLogo)
 
-    mobileIndicator.MouseButton1Click:Connect(function()
+    mobileIndicator.Activated:Connect(function()
         if not visible then
             miLogo.Rotation = 0
             miLogoScale.Scale = 0.6
@@ -1085,7 +1085,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     searchtextbox.TextSize = 18
     searchtextbox.TextXAlignment = Enum.TextXAlignment.Left
 
-    searchicon.MouseButton1Click:Connect(function()
+    searchicon.Activated:Connect(function()
         searchtextbox:CaptureFocus()
     end)
 
@@ -1198,7 +1198,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     closeIcon.AnchorPoint = Vector2.new(0.5, 0.5)
     closeIcon.Image = Theme.Icons["x"]
     closeIcon.ImageTransparency = 1
-    close.MouseButton1Click:Connect(function()
+    close.Activated:Connect(function()
         window:Notify2(
             "CONFIRM CLOSE!",
             "Are you sure you want to destroy the UI?",
@@ -1232,7 +1232,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     minimizeIcon.Image = Theme.Icons["minus"]
     minimizeIcon.ImageTransparency = 1
 
-    minimize.MouseButton1Click:Connect(function()
+    minimize.Activated:Connect(function()
         if UserInputService.TouchEnabled then
             window:ToggleVisible()
         end
@@ -1536,7 +1536,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     end
 
     if visiblekey then
-        minimize.MouseButton1Click:Connect(function()
+        minimize.Activated:Connect(function()
             if not UserInputService.TouchEnabled then
                 window:ToggleVisible()
             end
@@ -1553,7 +1553,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             window.greenButtonConnection:Disconnect() 
         end
         
-        window.greenButtonConnection = resize.MouseButton1Click:Connect(function()
+        window.greenButtonConnection = resize.Activated:Connect(function()
             isMaximized = not isMaximized
             local tweenTime = 0.3
             local tween
@@ -2029,7 +2029,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             SectionHeader.BackgroundTransparency = 0  -- CHANGED: Make background visible
             SectionHeader.Size = UDim2.new(1, 0, 0, 40)  -- CHANGED: Increased from 35 to 40
             SectionHeader.AutoButtonColor = false
-            SectionHeader.Active = true
             SectionHeader.Font = Theme.Fonts.Title
             SectionHeader.Text = "  " .. sectionName
             SectionHeader.TextColor3 = Theme.Colors.Text
@@ -2075,10 +2074,9 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
             -- Toggle Logic
             local tweening = false
-            SectionHeader.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    if tweening then return end
-                    tweening = true
+            SectionHeader.Activated:Connect(function()
+                if tweening then return end
+                tweening = true
 
                 collapsed = not collapsed
                 local targetRotation = collapsed and -90 or 0
@@ -2125,7 +2123,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     end)
                     tween:Play()
                 end
-                end
             end)
 
             function section:Button(text, callback)
@@ -2141,7 +2138,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 button.TextColor3 = Theme.Colors.Text
                 button.TextSize = 14
                 button.AutoButtonColor = false
-                button.Active = true
                 button.LayoutOrder = sectionLayoutOrderCounter
 
                 local uc_3 = Instance.new("UICorner")
@@ -2167,13 +2163,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 end)
 
                 if callback then
-                    button.InputBegan:Connect(function(input)
-                        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                            TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = Theme.Colors.Primary}):Play()
-                            task.wait(0.1)
-                            TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Theme.Colors.ElementBack}):Play()
-                            task.spawn(callback)
-                        end
+                    button.Activated:Connect(function()
+                        TweenService:Create(button, TweenInfo.new(0.1), {BackgroundColor3 = Theme.Colors.Primary}):Play()
+                        task.wait(0.1)
+                        TweenService:Create(button, TweenInfo.new(0.2), {BackgroundColor3 = Theme.Colors.ElementBack}):Play()
+                        task.spawn(callback)
                     end)
                 end
             end
@@ -2204,7 +2198,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 ToggleFrame.BackgroundColor3 = Theme.Colors.ElementBack
                 ToggleFrame.Size = UDim2.new(1, 0, 0, 32)
                 ToggleFrame.AutoButtonColor = false
-                ToggleFrame.Active = true
                 ToggleFrame.Text = ""
                 ToggleFrame.LayoutOrder = sectionLayoutOrderCounter
                 local corner = Instance.new("UICorner", ToggleFrame)
@@ -2248,8 +2241,7 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 local onPos = UDim2.new(0, 20, 0, 2)
                 ToggleCircle.Position = toggled and onPos or offPos
 
-            ToggleFrame.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            ToggleFrame.Activated:Connect(function()
                     toggled = not toggled
                     local targetColor = toggled and Theme.Colors.Primary or Theme.Colors.ContentBack
                     local targetPos = toggled and onPos or offPos
@@ -2268,8 +2260,8 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                     if callback then
                         task.spawn(callback, toggled)
                     end
-                end
-            end)
+                end)
+            end
 
             function section:TextField(text, placeholder, callback)
                 sectionLayoutOrderCounter = sectionLayoutOrderCounter + 1
@@ -2382,7 +2374,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 thumb.Position = UDim2.new(0, 0, 0.5, 0)
                 thumb.ZIndex = 3
                 thumb.Text = ""
-                thumb.Active = true
                 local thumbCorner = Instance.new("UICorner", thumb)
                 thumbCorner.CornerRadius = Theme.Sizes.FullRadius
                 local thumbStroke = Instance.new("UIStroke", thumb)
@@ -2462,8 +2453,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 dropdownButton.AnchorPoint = Vector2.new(0, 0.5)
                 dropdownButton.Size = UDim2.new(0.5, 0, 1, -6)
                 dropdownButton.Font = Theme.Fonts.Body
-                dropdownButton.AutoButtonColor = false
-                dropdownButton.Active = true
                 dropdownButton.Text = (isMultiSelect and "Select") or (defaultValue or list[1] or "Select")
 
                 -- Initialize selectedItems from defaultValue for multi-select
@@ -2508,7 +2497,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 optionsFrame.Visible = false
                 optionsFrame.ZIndex = 20
                 optionsFrame.ClipsDescendants = true
-                optionsFrame.Active = true
                 
                 local uc_options = Instance.new("UICorner", optionsFrame)
                 uc_options.CornerRadius = Theme.Sizes.SmallRadius
@@ -2520,7 +2508,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 searchContainer.Position = UDim2.new(0, 5, 0, 5)
                 searchContainer.Size = UDim2.new(1, -10, 0, 25)
                 searchContainer.ZIndex = 21
-                searchContainer.Active = true
                 local uc_search = Instance.new("UICorner", searchContainer)
                 uc_search.CornerRadius = Theme.Sizes.SmallRadius
 
@@ -2562,7 +2549,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                 scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
                 scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
                 scrollingList.ZIndex = 35
-                scrollingList.Active = false
 
                 local listLayout = Instance.new("UIListLayout", scrollingList)
                 listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -2682,14 +2668,13 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
     
                     optionButton.AutoButtonColor = false
     
-                    optionButton.InputBegan:Connect(function(input)
-                        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                            if isMultiSelect then
-                                selectedItems[optionName] = not selectedItems[optionName]
-                                checkmark.Visible = selectedItems[optionName]
-        
-                                local result = {}
-                                for _, item in ipairs(newList) do
+                    optionButton.Activated:Connect(function()
+                        if isMultiSelect then
+                            selectedItems[optionName] = not selectedItems[optionName]
+                            checkmark.Visible = selectedItems[optionName]
+    
+                            local result = {}
+                            for _, item in ipairs(newList) do
                                 if selectedItems[item] then table.insert(result, item) end
                             end
     
@@ -2706,7 +2691,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
                             dropdownButton.Text = optionName
                             toggleDropdown(false)
                             if callback then callback(optionName) end
-                            end
                         end
                     end)
                     
@@ -2730,13 +2714,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 UpdateOptions(list)
     
-            dropdownButton.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                        toggleDropdown(not optionsFrame.Visible)
-                        for _, button in ipairs(scrollingList:GetChildren()) do
-                            if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
-                                button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
-                            end
+            dropdownButton.Activated:Connect(function()
+                    toggleDropdown(not optionsFrame.Visible)
+                    for _, button in ipairs(scrollingList:GetChildren()) do
+                        if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
+                            button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
                         end
                     end
                 end)
@@ -3116,13 +3098,13 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             local dropdownButton = Instance.new("TextButton")
             dropdownButton.Name = "DropdownButton"
             dropdownButton.Parent = dropdown
+            dropdownButton.BackgroundColor3 = Theme.Colors.LightGray
+            dropdownButton.Parent = dropdown            
             dropdownButton.BackgroundColor3 = Theme.Colors.ElementBack
             dropdownButton.Position = UDim2.new(0.5, 0, 0.5, 0)
             dropdownButton.AnchorPoint = Vector2.new(0, 0.5)
             dropdownButton.Size = UDim2.new(0.5, 0, 1, -6)
             dropdownButton.Font = Theme.Fonts.Body
-            dropdownButton.AutoButtonColor = false
-            dropdownButton.Active = true
             dropdownButton.Text = (isMultiSelect and "Select") or (defaultValue or list[1] or "Select")
             if isMultiSelect and type(defaultValue) == "table" and #defaultValue > 0 then
                 dropdownButton.Text = table.concat(defaultValue, ", ")
@@ -3163,7 +3145,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             optionsFrame.Visible = false
             optionsFrame.ZIndex = 20
             optionsFrame.ClipsDescendants = true
-            optionsFrame.Active = true
             
 
             local uc_options = Instance.new("UICorner", optionsFrame)
@@ -3176,7 +3157,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             searchContainer.Position = UDim2.new(0, 5, 0, 5)
             searchContainer.Size = UDim2.new(1, -10, 0, 25)
             searchContainer.ZIndex = 21
-            searchContainer.Active = true
             local uc_search = Instance.new("UICorner", searchContainer)
             uc_search.CornerRadius = Theme.Sizes.SmallRadius
 
@@ -3218,7 +3198,6 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
             scrollingList.ScrollBarImageColor3 = Theme.Colors.Text
             scrollingList.VerticalScrollBarPosition = Enum.VerticalScrollBarPosition.Left
             scrollingList.ZIndex = 35
-            scrollingList.Active = false
 
             local listLayout = Instance.new("UIListLayout", scrollingList)
             listLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -3341,31 +3320,29 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
                 optionButton.AutoButtonColor = false
 
-                optionButton.InputBegan:Connect(function(input)
-                    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                        if isMultiSelect then
-                            selectedItems[optionName] = not selectedItems[optionName]
-                            checkmark.Visible = selectedItems[optionName]
+                optionButton.Activated:Connect(function()
+                    if isMultiSelect then
+                        selectedItems[optionName] = not selectedItems[optionName]
+                        checkmark.Visible = selectedItems[optionName]
 
-                            local result = {}
-                            for _, item in ipairs(newList) do
-                                if selectedItems[item] then table.insert(result, item) end
-                            end
-
-                            if #result > 0 then
-                                dropdownButton.Text = table.concat(result, ", ")
-                            else
-                                dropdownButton.Text = "Select"
-                            end
-
-                            if callback then
-                                callback(result)
-                            end
-                        else
-                            dropdownButton.Text = optionName
-                            toggleDropdown(false)
-                            if callback then callback(optionName) end
+                        local result = {}
+                        for _, item in ipairs(newList) do
+                            if selectedItems[item] then table.insert(result, item) end
                         end
+
+                        if #result > 0 then
+                            dropdownButton.Text = table.concat(result, ", ")
+                        else
+                            dropdownButton.Text = "Select"
+                        end
+
+                        if callback then
+                            callback(result)
+                        end
+                    else
+                        dropdownButton.Text = optionName
+                        toggleDropdown(false)
+                        if callback then callback(optionName) end
                     end
                 end)
                 
@@ -3389,13 +3366,11 @@ function lib:init(ti, sub_ti, dosplash, visiblekey, deleteprevious)
 
             UpdateOptions(list)
 
-            dropdownButton.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    toggleDropdown(not optionsFrame.Visible)
-                    for _, button in ipairs(scrollingList:GetChildren()) do
-                        if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
-                            button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
-                        end
+            dropdownButton.Activated:Connect(function()
+                toggleDropdown(not optionsFrame.Visible)
+                for _, button in ipairs(scrollingList:GetChildren()) do
+                    if button:IsA("TextButton") and button:FindFirstChild("Checkmark") then
+                        button.Checkmark.Visible = (isMultiSelect and selectedItems[button.Name]) or (dropdownButton.Text == button.Name)
                     end
                 end
             end)
